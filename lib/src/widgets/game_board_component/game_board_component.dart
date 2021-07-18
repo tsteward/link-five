@@ -5,10 +5,11 @@ import 'package:link_five/src/widgets/game_board_component/tile_painter.dart';
 
 class GameBoardComponent extends StatelessWidget {
   final List<Tile> tiles;
+  final List<Tile>? winningTiles;
   final Function(int x, int y) onClick;
 
   const GameBoardComponent(
-      {Key? key, required this.tiles, required this.onClick})
+      {Key? key, required this.tiles, required this.winningTiles, required this.onClick})
       : super(key: key);
 
   @override
@@ -23,7 +24,7 @@ class GameBoardComponent extends StatelessWidget {
         onClick(x, y);
       },
       child: CustomPaint(
-        painter: TilePainter(tiles),
+        painter: TilePainter(tiles, winningTiles),
         child: Container(),
       ),
     );

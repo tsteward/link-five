@@ -6,8 +6,9 @@ import 'package:link_five/src/widgets/game_board_component/constants.dart';
 
 class TilePainter extends CustomPainter {
   List<Tile> _tiles;
+  List<Tile>? _winningTiles;
 
-  TilePainter(this._tiles);
+  TilePainter(this._tiles, this._winningTiles);
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -39,6 +40,26 @@ class TilePainter extends CustomPainter {
           ..strokeWidth = 3,
       );
     }
+
+    if (_winningTiles != null) {
+      for (final tile in _winningTiles!) {
+      final tileCenter = Offset(
+        center.dx + tile.x * tileSize,
+        center.dy + tile.y * tileSize,
+      );
+        canvas.drawRect(
+        Rect.fromCenter(
+          center: tileCenter,
+          width: tileSize,
+          height: tileSize,
+        ),
+        Paint()
+          ..color = Colors.blue
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 3,
+      );
+      }
+    }
   }
 
   Color _tileColorToFlutterColor(PlayerColor tileColor) {
@@ -56,6 +77,6 @@ class TilePainter extends CustomPainter {
 
   @override
   bool shouldRepaint(TilePainter oldDelegate) {
-    return oldDelegate._tiles != _tiles;
+    return oldDelegate._tiles != _tiles || oldDelegate._winningTiles != _winningTiles;
   }
 }

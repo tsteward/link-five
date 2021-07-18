@@ -36,6 +36,7 @@ class _HomeState extends State<Home> {
     return Scaffold(
       body: GameBoardComponent(
         tiles: game.tiles,
+        winningTiles: game.winningTiles,
         onClick: (x, y) {
           setState(() {
             game.applyAction(PlaceTileAction(
