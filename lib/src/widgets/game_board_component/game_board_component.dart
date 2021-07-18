@@ -1,18 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:link_five/src/game_logic/game_board.dart';
+import 'package:link_five/src/model/game_state.dart';
+import 'package:link_five/src/model/tile_location.dart';
 import 'package:link_five/src/widgets/game_board_component/constants.dart';
 import 'package:link_five/src/widgets/game_board_component/tile_painter.dart';
 
 class GameBoardComponent extends StatelessWidget {
-  final List<Tile> tiles;
-  final List<Tile>? winningTiles;
-  final Function(int x, int y) onClick;
+  final GameState gameState;
+  final Function(TileLocation location) onClick;
 
   const GameBoardComponent(
-      {Key? key,
-      required this.tiles,
-      required this.winningTiles,
-      required this.onClick})
+      {Key? key, required this.gameState, required this.onClick})
       : super(key: key);
 
   @override
@@ -24,10 +21,10 @@ class GameBoardComponent extends StatelessWidget {
         final relative = details.globalPosition - center;
         final x = (relative.dx / tileSize).round();
         final y = (relative.dy / tileSize).round();
-        onClick(x, y);
+        onClick(TileLocation(x, y));
       },
       child: CustomPaint(
-        painter: TilePainter(tiles, winningTiles),
+        painter: TilePainter(gameState),
         child: Container(),
       ),
     );

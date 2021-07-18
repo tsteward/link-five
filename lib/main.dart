@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:link_five/src/game_logic/game.dart';
-import 'package:link_five/src/game_logic/player_color.dart';
+import 'package:link_five/src/logic/game.dart';
+import 'package:link_five/src/model/player_color.dart';
 import 'package:link_five/src/widgets/game_board_component/game_board_component.dart';
 
 void main() {
@@ -35,15 +35,11 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: GameBoardComponent(
-        tiles: game.tiles,
-        winningTiles: game.winningTiles,
-        onClick: (x, y) {
+        gameState: game.gameState,
+        onClick: (location) {
           setState(() {
             game.applyAction(PlaceTileAction(
-              playerColor: game.currentPlayer,
-              x: x,
-              y: y,
-            ));
+                playerColor: game.gameState.currentPlayer, location: location));
           });
         },
       ),
