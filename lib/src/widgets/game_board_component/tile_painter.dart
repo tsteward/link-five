@@ -43,21 +43,21 @@ class TilePainter extends CustomPainter {
 
     if (_winningTiles != null) {
       for (final tile in _winningTiles!) {
-      final tileCenter = Offset(
-        center.dx + tile.x * tileSize,
-        center.dy + tile.y * tileSize,
-      );
+        final tileCenter = Offset(
+          center.dx + tile.x * tileSize,
+          center.dy + tile.y * tileSize,
+        );
         canvas.drawRect(
-        Rect.fromCenter(
-          center: tileCenter,
-          width: tileSize,
-          height: tileSize,
-        ),
-        Paint()
-          ..color = Colors.blue
-          ..style = PaintingStyle.stroke
-          ..strokeWidth = 3,
-      );
+          Rect.fromCenter(
+            center: tileCenter,
+            width: tileSize,
+            height: tileSize,
+          ),
+          Paint()
+            ..color = Colors.blue
+            ..style = PaintingStyle.stroke
+            ..strokeWidth = 3,
+        );
       }
     }
   }
@@ -77,6 +77,7 @@ class TilePainter extends CustomPainter {
 
   @override
   bool shouldRepaint(TilePainter oldDelegate) {
-    return oldDelegate._tiles != _tiles || oldDelegate._winningTiles != _winningTiles;
+    return oldDelegate._tiles != _tiles ||
+        oldDelegate._winningTiles != _winningTiles;
   }
 }
