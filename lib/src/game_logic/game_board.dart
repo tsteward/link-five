@@ -6,7 +6,8 @@ class GameBoard {
 
   PlayerColor? tile(int x, int y) => _tiles.get(x, y);
 
-  List<Tile> get tiles => _tiles.all.map((e) => Tile(e.x, e.y, e.value)).toList();
+  List<Tile> get tiles =>
+      _tiles.all.map((e) => Tile(e.x, e.y, e.value)).toList();
 
   void placeTile(int x, int y, PlayerColor color) => _tiles.set(x, y, color);
 }

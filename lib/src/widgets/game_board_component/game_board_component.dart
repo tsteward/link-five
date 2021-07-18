@@ -7,7 +7,8 @@ class GameBoardComponent extends StatelessWidget {
   final List<Tile> tiles;
   final Function(int x, int y) onClick;
 
-  const GameBoardComponent({Key? key, required this.tiles, required this.onClick})
+  const GameBoardComponent(
+      {Key? key, required this.tiles, required this.onClick})
       : super(key: key);
 
   @override
