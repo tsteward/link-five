@@ -1,8 +1,10 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:link_five/src/logic/actions/place_tile_action.dart';
 import 'package:link_five/src/logic/game.dart';
 import 'package:link_five/src/model/player_color.dart';
-import 'package:link_five/src/widgets/game_board_component/game_board_component.dart';
+import 'package:link_five/src/widgets/game_board.dart';
+import 'package:link_five/src/widgets/loading.dart';
 
 void main() {
   runApp(MyApp());
@@ -30,20 +32,29 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  final game = Game(turnOrder: [PlayerColor.pink, PlayerColor.green]);
+  final Future<FirebaseApp> _initialization = Firebase.initializeApp();
+  final _game = Game(turnOrder: [PlayerColor.pink, PlayerColor.green]);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: GameBoardComponent(
-        gameState: game.gameState,
-        onClick: (location) {
-          setState(() {
-            game.applyAction(PlaceTileAction(
-                playerColor: game.gameState.currentPlayer, location: location));
-          });
-        },
-      ),
+      body: FutureBuilder(
+          future: _initialization,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              return GameBoardWidget(
+                gameState: _game.gameState,
+                onClick: (location) {
+                  setState(() {
+                    _game.applyAction(PlaceTileAction(
+                        playerColor: _game.gameState.currentPlayer,
+                        location: location));
+                  });
+                },
+              );
+            }
+            return LoadingWidget();
+          }),
     );
   }
 }

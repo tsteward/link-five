@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:link_five/src/model/game_state.dart';
 import 'package:link_five/src/model/player_color.dart';
-import 'package:link_five/src/widgets/game_board_component/constants.dart';
+import 'package:link_five/src/widgets/game_board/constants.dart';
 
 class TilePainter extends CustomPainter {
   GameState _gameState;

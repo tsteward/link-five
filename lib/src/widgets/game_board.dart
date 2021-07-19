@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:link_five/src/model/game_state.dart';
 import 'package:link_five/src/model/tile_location.dart';
-import 'package:link_five/src/widgets/game_board_component/constants.dart';
-import 'package:link_five/src/widgets/game_board_component/tile_painter.dart';
+import 'package:link_five/src/widgets/game_board/constants.dart';
+import 'package:link_five/src/widgets/game_board/tile_painter.dart';
 
-class GameBoardComponent extends StatelessWidget {
+class GameBoardWidget extends StatelessWidget {
   final GameState gameState;
   final Function(TileLocation location) onClick;
 
-  const GameBoardComponent(
+  const GameBoardWidget(
       {Key? key, required this.gameState, required this.onClick})
       : super(key: key);
 
