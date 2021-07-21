@@ -1,10 +1,15 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:link_five/src/model/game/game_state.dart';
+import 'package:link_five/src/network/network.dart';
 import 'package:link_five/src/logic/actions/place_tile_action.dart';
 import 'package:link_five/src/logic/game.dart';
-import 'package:link_five/src/model/player_color.dart';
+import 'package:link_five/src/model/game/player_color.dart';
+import 'package:link_five/src/model/network/network_state.dart';
 import 'package:link_five/src/widgets/game_board.dart';
+import 'package:link_five/src/widgets/setup_game_code.dart';
 import 'package:link_five/src/widgets/loading.dart';
+import 'package:link_five/src/widgets/setup_players.dart';
 
 void main() {
   runApp(MyApp());
@@ -17,7 +22,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.green,
       ),
       home: Home(),
     );
@@ -32,8 +37,33 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  final Future<FirebaseApp> _initialization = Firebase.initializeApp();
-  final _game = Game(turnOrder: [PlayerColor.pink, PlayerColor.green]);
+  final Network _network = Network();
+  final _game = Game(turnOrder: PlayerColor.values.toList());
+
+  GameState _gameState = GameState();
+  NetworkState _networkState = NetworkState();
+  Future<void>? _initialization;
+
+  @override
+  void initState() {
+    super.initState();
+
+    setState(() {
+      _gameState = _game.state;
+      _networkState = _network.state;
+      _initialization = initialize();
+    });
+
+    _game.stateStream
+        .listen((gameState) => setState(() => _gameState = gameState));
+    _network.stateStream
+        .listen((networkState) => setState(() => _networkState = networkState));
+  }
+
+  Future<void> initialize() async {
+    await Firebase.initializeApp();
+    await _network.initialize();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,20 +71,54 @@ class _HomeState extends State<Home> {
       body: FutureBuilder(
           future: _initialization,
           builder: (context, snapshot) {
+            Widget? setupWidget;
+            if (snapshot.connectionState != ConnectionState.done) {
+              setupWidget = LoadingWidget();
+            } else if (_networkState.gameCode == null) {
+              setupWidget = _setupGameCode(context);
+            } else if (_networkState.players != null) {
+              setupWidget = _setupPlayers(context);
+            } else if (_networkState.turnOrder != null) {
+              setupWidget = null;
+            } else {
+              setupWidget = LoadingWidget();
+            }
+
             if (snapshot.connectionState == ConnectionState.done) {
-              return GameBoardWidget(
-                gameState: _game.gameState,
-                onClick: (location) {
-                  setState(() {
-                    _game.applyAction(PlaceTileAction(
-                        playerColor: _game.gameState.currentPlayer,
-                        location: location));
-                  });
-                },
+              return Stack(
+                fit: StackFit.expand,
+                children: [
+                  _gameBoard(context),
+                  if (setupWidget != null) setupWidget,
+                  if (_networkState.gameCode == null) _setupGameCode(context),
+                  if (_networkState.players != null) _setupPlayers(context),
+                ],
               );
             }
             return LoadingWidget();
           }),
     );
   }
+
+  Widget _gameBoard(BuildContext context) => GameBoardWidget(
+        gameState: _gameState,
+        onClick: (location) {
+          setState(() {
+            _game.applyAction(PlaceTileAction(
+                playerColor: _gameState.currentPlayer, location: location));
+          });
+        },
+      );
+
+  Widget _setupGameCode(BuildContext context) => SetupGameCodeWidget(
+        onJoinGameClicked: (String gameCode) => _network.joinGame(gameCode),
+        onNewGameClicked: () => _network.createGame(),
+      );
+
+  Widget _setupPlayers(BuildContext context) => SetupPlayersWidget(
+        onPlayerInfoChanged: (player) => _network.changePlayerInfo(player),
+        userId: _networkState.userId!,
+        gameCode: _networkState.gameCode!,
+        players: _networkState.players!.asMap(),
+      );
 }

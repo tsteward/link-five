@@ -1,9 +1,9 @@
 import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
-import 'package:link_five/src/model/player_color.dart';
-import 'package:link_five/src/model/tile.dart';
-import 'package:link_five/src/model/tile_location.dart';
+import 'package:link_five/src/model/game/player_color.dart';
+import 'package:link_five/src/model/game/tile.dart';
+import 'package:link_five/src/model/game/tile_location.dart';
 
 part 'game_state.g.dart';
 
@@ -28,9 +28,9 @@ abstract class GameState implements Built<GameState, GameStateBuilder> {
       this.rebuild((b) => b.gameBoard[tile.location] = tile);
 
   GameState._();
-  factory GameState(BuiltList<PlayerColor> turnOrder) => _$GameState(
+  factory GameState([BuiltList<PlayerColor>? turnOrder]) => _$GameState(
         (b) => b
-          ..turnOrder = turnOrder.toBuilder()
+          ..turnOrder = (turnOrder?.toBuilder() ?? ListBuilder<PlayerColor>())
           ..turnIndex = 0,
       );
 }

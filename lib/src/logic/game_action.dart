@@ -1,5 +1,5 @@
-import 'package:link_five/src/model/game_state.dart';
-import 'package:link_five/src/model/player_color.dart';
+import 'package:link_five/src/model/game/game_state.dart';
+import 'package:link_five/src/model/game/player_color.dart';
 
 abstract class GameAction {
   final PlayerColor playerColor;

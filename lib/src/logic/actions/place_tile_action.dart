@@ -1,9 +1,9 @@
 import 'package:link_five/src/logic/actions/action_helpers.dart';
 import 'package:link_five/src/logic/game_action.dart';
-import 'package:link_five/src/model/game_state.dart';
-import 'package:link_five/src/model/player_color.dart';
-import 'package:link_five/src/model/tile.dart';
-import 'package:link_five/src/model/tile_location.dart';
+import 'package:link_five/src/model/game/game_state.dart';
+import 'package:link_five/src/model/game/player_color.dart';
+import 'package:link_five/src/model/game/tile.dart';
+import 'package:link_five/src/model/game/tile_location.dart';
 
 class PlaceTileAction extends GameAction {
   TileLocation location;

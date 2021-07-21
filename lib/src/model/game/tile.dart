@@ -1,7 +1,7 @@
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
-import 'package:link_five/src/model/player_color.dart';
-import 'package:link_five/src/model/tile_location.dart';
+import 'package:link_five/src/model/game/player_color.dart';
+import 'package:link_five/src/model/game/tile_location.dart';
 
 part 'tile.g.dart';
 

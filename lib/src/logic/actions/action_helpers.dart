@@ -1,7 +1,7 @@
 import 'package:built_collection/built_collection.dart';
-import 'package:link_five/src/model/game_state.dart';
-import 'package:link_five/src/model/tile.dart';
-import 'package:link_five/src/model/tile_location.dart';
+import 'package:link_five/src/model/game/game_state.dart';
+import 'package:link_five/src/model/game/tile.dart';
+import 'package:link_five/src/model/game/tile_location.dart';
 
 extension AdjacencyChecking on TileLocation {
   bool hasAdjacentTile(GameState gameState) =>

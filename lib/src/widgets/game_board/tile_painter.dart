@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:link_five/src/model/game_state.dart';
-import 'package:link_five/src/model/player_color.dart';
+import 'package:link_five/src/model/game/game_state.dart';
+import 'package:link_five/src/widgets/constants.dart';
 import 'package:link_five/src/widgets/game_board/constants.dart';
 
 class TilePainter extends CustomPainter {
@@ -26,7 +26,7 @@ class TilePainter extends CustomPainter {
           width: tileSize,
           height: tileSize,
         ),
-        Paint()..color = _tileColorToFlutterColor[tile.color]!,
+        Paint()..color = playerColorToFlutterColor[tile.color]!,
       );
       canvas.drawRect(
         Rect.fromCenter(
@@ -62,13 +62,6 @@ class TilePainter extends CustomPainter {
       }
     }
   }
-
-  static const _tileColorToFlutterColor = {
-    PlayerColor.green: Colors.green,
-    PlayerColor.orange: Colors.orange,
-    PlayerColor.pink: Colors.pink,
-    PlayerColor.yellow: Colors.yellow,
-  };
 
   @override
   bool shouldRepaint(TilePainter oldDelegate) {
