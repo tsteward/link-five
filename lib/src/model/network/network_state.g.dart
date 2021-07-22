@@ -42,13 +42,13 @@ class _$NetworkStateSerializer implements StructuredSerializer<NetworkState> {
             specifiedType: const FullType(BuiltMap,
                 const [const FullType(String), const FullType(Player)])));
     }
-    value = object.turnOrder;
+    value = object.turnOrderByUserId;
     if (value != null) {
       result
-        ..add('turnOrder')
+        ..add('turnOrderByUserId')
         ..add(serializers.serialize(value,
-            specifiedType: const FullType(
-                BuiltList, const [const FullType(PlayerColor)])));
+            specifiedType:
+                const FullType(BuiltList, const [const FullType(String)])));
     }
     return result;
   }
@@ -78,10 +78,10 @@ class _$NetworkStateSerializer implements StructuredSerializer<NetworkState> {
               specifiedType: const FullType(BuiltMap,
                   const [const FullType(String), const FullType(Player)]))!);
           break;
-        case 'turnOrder':
-          result.turnOrder.replace(serializers.deserialize(value,
+        case 'turnOrderByUserId':
+          result.turnOrderByUserId.replace(serializers.deserialize(value,
                   specifiedType: const FullType(
-                      BuiltList, const [const FullType(PlayerColor)]))!
+                      BuiltList, const [const FullType(String)]))!
               as BuiltList<Object?>);
           break;
       }
@@ -99,13 +99,29 @@ class _$NetworkState extends NetworkState {
   @override
   final BuiltMap<String, Player>? players;
   @override
-  final BuiltList<PlayerColor>? turnOrder;
+  final BuiltList<String>? turnOrderByUserId;
+  BuiltList<PlayerColor>? __turnOrderByColor;
+  bool ___turnOrderByColor = false;
+  bool? __hasGameStarted;
 
   factory _$NetworkState([void Function(NetworkStateBuilder)? updates]) =>
       (new NetworkStateBuilder()..update(updates)).build();
 
-  _$NetworkState._({this.userId, this.gameCode, this.players, this.turnOrder})
+  _$NetworkState._(
+      {this.userId, this.gameCode, this.players, this.turnOrderByUserId})
       : super._();
+
+  @override
+  BuiltList<PlayerColor>? get turnOrderByColor {
+    if (!___turnOrderByColor) {
+      __turnOrderByColor = super.turnOrderByColor;
+      ___turnOrderByColor = true;
+    }
+    return __turnOrderByColor;
+  }
+
+  @override
+  bool get hasGameStarted => __hasGameStarted ??= super.hasGameStarted;
 
   @override
   NetworkState rebuild(void Function(NetworkStateBuilder) updates) =>
@@ -121,14 +137,14 @@ class _$NetworkState extends NetworkState {
         userId == other.userId &&
         gameCode == other.gameCode &&
         players == other.players &&
-        turnOrder == other.turnOrder;
+        turnOrderByUserId == other.turnOrderByUserId;
   }
 
   @override
   int get hashCode {
     return $jf($jc(
         $jc($jc($jc(0, userId.hashCode), gameCode.hashCode), players.hashCode),
-        turnOrder.hashCode));
+        turnOrderByUserId.hashCode));
   }
 
   @override
@@ -137,7 +153,7 @@ class _$NetworkState extends NetworkState {
           ..add('userId', userId)
           ..add('gameCode', gameCode)
           ..add('players', players)
-          ..add('turnOrder', turnOrder))
+          ..add('turnOrderByUserId', turnOrderByUserId))
         .toString();
   }
 }
@@ -159,11 +175,11 @@ class NetworkStateBuilder
       _$this._players ??= new MapBuilder<String, Player>();
   set players(MapBuilder<String, Player>? players) => _$this._players = players;
 
-  ListBuilder<PlayerColor>? _turnOrder;
-  ListBuilder<PlayerColor> get turnOrder =>
-      _$this._turnOrder ??= new ListBuilder<PlayerColor>();
-  set turnOrder(ListBuilder<PlayerColor>? turnOrder) =>
-      _$this._turnOrder = turnOrder;
+  ListBuilder<String>? _turnOrderByUserId;
+  ListBuilder<String> get turnOrderByUserId =>
+      _$this._turnOrderByUserId ??= new ListBuilder<String>();
+  set turnOrderByUserId(ListBuilder<String>? turnOrderByUserId) =>
+      _$this._turnOrderByUserId = turnOrderByUserId;
 
   NetworkStateBuilder();
 
@@ -173,7 +189,7 @@ class NetworkStateBuilder
       _userId = $v.userId;
       _gameCode = $v.gameCode;
       _players = $v.players?.toBuilder();
-      _turnOrder = $v.turnOrder?.toBuilder();
+      _turnOrderByUserId = $v.turnOrderByUserId?.toBuilder();
       _$v = null;
     }
     return this;
@@ -199,14 +215,14 @@ class NetworkStateBuilder
               userId: userId,
               gameCode: gameCode,
               players: _players?.build(),
-              turnOrder: _turnOrder?.build());
+              turnOrderByUserId: _turnOrderByUserId?.build());
     } catch (_) {
       late String _$failedField;
       try {
         _$failedField = 'players';
         _players?.build();
-        _$failedField = 'turnOrder';
-        _turnOrder?.build();
+        _$failedField = 'turnOrderByUserId';
+        _turnOrderByUserId?.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
             'NetworkState', _$failedField, e.toString());

@@ -76,9 +76,10 @@ class _HomeState extends State<Home> {
               setupWidget = LoadingWidget();
             } else if (_networkState.gameCode == null) {
               setupWidget = _setupGameCode(context);
-            } else if (_networkState.players != null) {
+            } else if (_networkState.players != null &&
+                !_networkState.hasGameStarted) {
               setupWidget = _setupPlayers(context);
-            } else if (_networkState.turnOrder != null) {
+            } else if (_networkState.hasGameStarted) {
               setupWidget = null;
             } else {
               setupWidget = LoadingWidget();
@@ -90,8 +91,6 @@ class _HomeState extends State<Home> {
                 children: [
                   _gameBoard(context),
                   if (setupWidget != null) setupWidget,
-                  if (_networkState.gameCode == null) _setupGameCode(context),
-                  if (_networkState.players != null) _setupPlayers(context),
                 ],
               );
             }

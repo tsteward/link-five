@@ -6,7 +6,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:link_five/src/model/game/player_color.dart';
 import 'package:link_five/src/model/network/network_state.dart';
-import 'package:link_five/src/model/network/player.dart';
+import 'package:link_five/src/model/store/game_start.dart';
+import 'package:link_five/src/model/store/player.dart';
 import 'package:link_five/src/network/words.dart';
 
 const _letters = 'abcdefghijklmnopqrstuvwxyz';
@@ -65,7 +66,12 @@ class Network {
       playersReference.doc(state.userId).set(player.toMap()!);
     }
 
-    // listen to player updates
+    _listenToPlayerUpdates(playersReference);
+    _listenToGameStartUpdates();
+  }
+
+  void _listenToPlayerUpdates(
+      CollectionReference<Map<String, dynamic>> playersReference) async {
     await for (final snapshot in playersReference.snapshots()) {
       final players = MapBuilder<String, Player>();
       for (final doc in snapshot.docs) {
@@ -75,10 +81,31 @@ class Network {
         }
       }
       _setState(state.rebuild((b) => b..players = players));
+      final player = players[state.userId];
+      if (player != null) {
+        _startIfEveryoneReady(player);
+      }
     }
   }
 
-  void changePlayerInfo(Player player) {
+  void _listenToGameStartUpdates() async {
+    final startGameReference =
+        _firestore.collection('/games/${state.gameCode}/start-game').doc('0');
+    await for (final snapshot in startGameReference.snapshots()) {
+      if (snapshot.data() != null) {
+        final gameStart = GameStart.fromMap(snapshot.data()!);
+        if (gameStart != null && state.players != null) {
+          final turnOrder = gameStart.turnOrder;
+          _setState(state
+              .rebuild((b) => b..turnOrderByUserId = turnOrder.toBuilder()));
+        }
+      }
+    }
+  }
+
+  Future<void> changePlayerInfo(Player player) async {
+    await _startIfEveryoneReady(player);
+
     final playersReference =
         _firestore.collection('/games/${state.gameCode}/players');
 
@@ -96,6 +123,26 @@ class Network {
     final adjective = adjectives[random.nextInt(adjectives.length)];
     final animal = animals[random.nextInt(animals.length)];
     return '$adjective $animal';
+  }
+
+  Future<void> _startIfEveryoneReady(Player thisPlayer) async {
+    if (thisPlayer.isReady) {
+      final otherPlayersAreReady = state.players?.entries.every(
+            (player) => player.value.isReady || player.key == state.userId,
+          ) ==
+          true;
+      if (otherPlayersAreReady) {
+        final startGameReference =
+            _firestore.collection('/games/${state.gameCode}/start-game');
+        final startGameDocument = await startGameReference.doc('0').get();
+        if (!startGameDocument.exists) {
+          final userIds = state.players!.keys.toList();
+          final gameStart = GameStart(
+              (b) => b..turnOrder = userIds.toBuiltList().toBuilder());
+          startGameReference.doc('0').set(gameStart.toMap()!);
+        }
+      }
+    }
   }
 
   void _setState(NetworkState newState) {
