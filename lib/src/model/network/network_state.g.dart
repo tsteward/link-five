@@ -103,6 +103,8 @@ class _$NetworkState extends NetworkState {
   BuiltList<PlayerColor>? __turnOrderByColor;
   bool ___turnOrderByColor = false;
   bool? __hasGameStarted;
+  PlayerColor? __playerColor;
+  bool ___playerColor = false;
 
   factory _$NetworkState([void Function(NetworkStateBuilder)? updates]) =>
       (new NetworkStateBuilder()..update(updates)).build();
@@ -122,6 +124,15 @@ class _$NetworkState extends NetworkState {
 
   @override
   bool get hasGameStarted => __hasGameStarted ??= super.hasGameStarted;
+
+  @override
+  PlayerColor? get playerColor {
+    if (!___playerColor) {
+      __playerColor = super.playerColor;
+      ___playerColor = true;
+    }
+    return __playerColor;
+  }
 
   @override
   NetworkState rebuild(void Function(NetworkStateBuilder) updates) =>

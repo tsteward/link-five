@@ -14,6 +14,13 @@ class Game {
   Game({required List<PlayerColor> turnOrder})
       : _state = GameState(turnOrder.toBuiltList());
 
+  bool isPermitted(GameAction action) {
+    if (action.playerColor != _state.currentPlayer) {
+      return false;
+    }
+    return action.isPermitted(_state);
+  }
+
   ActionStatus applyAction(GameAction action) {
     if (action.playerColor != _state.currentPlayer) {
       return ActionStatus.fail;

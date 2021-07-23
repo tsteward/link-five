@@ -47,6 +47,18 @@ abstract class NetworkState
     return true;
   }
 
+  @memoized
+  PlayerColor? get playerColor {
+    if (players == null || turnOrderByUserId == null) {
+      return null;
+    }
+    final player = players![userId];
+    if (player == null) {
+      return null;
+    }
+    return player.color;
+  }
+
   NetworkState._();
   factory NetworkState([void Function(NetworkStateBuilder) updates]) =
       _$NetworkState;

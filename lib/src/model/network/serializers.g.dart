@@ -7,9 +7,13 @@ part of 'serializers.dart';
 // **************************************************************************
 
 Serializers _$serializers = (new Serializers().toBuilder()
+      ..add(GameAction.serializer)
+      ..add(GameActionType.serializer)
       ..add(GameStart.serializer)
+      ..add(PlaceTileAction.serializer)
       ..add(Player.serializer)
       ..add(PlayerColor.serializer)
+      ..add(TileLocation.serializer)
       ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(String)]),
           () => new ListBuilder<String>()))
