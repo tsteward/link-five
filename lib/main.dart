@@ -8,6 +8,7 @@ import 'package:link_five/src/logic/game.dart';
 import 'package:link_five/src/model/game/player_color.dart';
 import 'package:link_five/src/model/network/network_state.dart';
 import 'package:link_five/src/widgets/game_board.dart';
+import 'package:link_five/src/widgets/players_display.dart';
 import 'package:link_five/src/widgets/setup_game_code.dart';
 import 'package:link_five/src/widgets/loading.dart';
 import 'package:link_five/src/widgets/setup_players.dart';
@@ -112,6 +113,9 @@ class _HomeState extends State<Home> {
                 children: [
                   _gameBoard(context),
                   if (setupWidget != null) setupWidget,
+                  if (_networkState.players != null &&
+                      _gameState?.currentPlayer != null)
+                    _playersDisplayWidget(context),
                 ],
               );
             }
@@ -133,6 +137,12 @@ class _HomeState extends State<Home> {
         userId: _networkState.userId!,
         gameCode: _networkState.gameCode!,
         players: _networkState.players!.asMap(),
+      );
+
+  Widget _playersDisplayWidget(BuildContext context) => PlayersDisplayWidget(
+        players: _networkState.players!.values.toList(),
+        currentTurn: _gameState!.currentPlayer,
+        userColor: _networkState.playerColor!,
       );
 
   void _handleGameClick(TileLocation location) {
