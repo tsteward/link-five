@@ -12,22 +12,17 @@ class GridPainter extends CustomPainter {
     print("grid_painter");
     final center = size.center(Offset.zero);
 
-    canvas.drawLine(
-      Offset(200, 200),
-      Offset(400, 400),
-      Paint()..color = Colors.black,
-    );
     print("Width: ${size.width} Height: ${size.height} tileSize: $tileSize");
     print("${size.width / tileSize / 2}");
 
     for (var i = 0; i < size.width / tileSize / 2; i++) {
       canvas.drawLine(
         Offset(
-          tileSize * i + tileSize / 2,
+          tileSize * i + tileSize / 2 + center.dx,
           0,
         ),
         Offset(
-          tileSize * i + tileSize / 2,
+          tileSize * i + tileSize / 2 + center.dx,
           size.height,
         ),
         Paint()..color = Colors.grey,
@@ -35,12 +30,37 @@ class GridPainter extends CustomPainter {
 
       canvas.drawLine(
         Offset(
-          (tileSize * i + tileSize / 2) * -1,
+          (tileSize * i + tileSize / 2) * -1 + center.dx,
           0,
         ),
         Offset(
-          (tileSize * i + tileSize / 2) * -1,
+          (tileSize * i + tileSize / 2) * -1 + center.dx,
           size.height,
+        ),
+        Paint()..color = Colors.grey,
+      );
+    }
+    for (var i = 0; i < size.height / tileSize / 2; i++) {
+      canvas.drawLine(
+        Offset(
+          0,
+          tileSize * i + tileSize / 2 + center.dy,
+        ),
+        Offset(
+          size.width,
+          tileSize * i + tileSize / 2 + center.dy,
+        ),
+        Paint()..color = Colors.grey,
+      );
+
+      canvas.drawLine(
+        Offset(
+          0,
+          (tileSize * i + tileSize / 2) * -1 + center.dy,
+        ),
+        Offset(
+          size.width,
+          (tileSize * i + tileSize / 2) * -1 + center.dy,
         ),
         Paint()..color = Colors.grey,
       );
