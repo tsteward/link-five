@@ -111,8 +111,8 @@ class _HomeState extends State<Home> {
               return Stack(
                 fit: StackFit.expand,
                 children: [
-                  _gameBoard(context),
                   _gameGrid(context),
+                  _gameBoard(context),
                   if (setupWidget != null) setupWidget,
                 ],
               );

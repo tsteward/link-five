@@ -9,7 +9,6 @@ class GameGridWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("GameGridWidgetBuild");
     return CustomPaint(
       painter: GridPainter(),
       child: Container(),

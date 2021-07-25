@@ -9,12 +9,7 @@ class GridPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    print("grid_painter");
     final center = size.center(Offset.zero);
-
-    print("Width: ${size.width} Height: ${size.height} tileSize: $tileSize");
-    print("${size.width / tileSize / 2}");
-
     for (var i = 0; i < size.width / tileSize / 2; i++) {
       canvas.drawLine(
         Offset(
