@@ -117,7 +117,7 @@ class _HomeState extends State<Home> {
                   if (setupWidget != null) setupWidget,
                   if (_networkState.players != null &&
                       _gameState?.currentPlayer != null)
-                    _playersDisplayWidget(context),
+                    _gameStatusWidget(context),
                 ],
               );
             }
@@ -155,10 +155,11 @@ class _HomeState extends State<Home> {
         players: _networkState.players!.asMap(),
       );
 
-  Widget _playersDisplayWidget(BuildContext context) => PlayersDisplayWidget(
+  Widget _gameStatusWidget(BuildContext context) => GameStatusWidget(
         players: _networkState.players!.values.toList(),
         currentTurn: _gameState!.currentPlayer,
         userColor: _networkState.playerColor!,
+        gameCode: _networkState.gameCode ?? '',
       );
 
   void _handleGameClick(TileLocation location) {
