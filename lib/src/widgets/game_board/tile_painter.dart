@@ -55,7 +55,7 @@ class TilePainter extends CustomPainter {
             height: tileSize,
           ),
           Paint()
-            ..color = Colors.blue
+            ..color = Colors.red
             ..style = PaintingStyle.stroke
             ..strokeWidth = 3,
         );
