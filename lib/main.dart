@@ -8,6 +8,7 @@ import 'package:link_five/src/logic/game.dart';
 import 'package:link_five/src/model/game/player_color.dart';
 import 'package:link_five/src/model/network/network_state.dart';
 import 'package:link_five/src/widgets/game_board.dart';
+import 'package:link_five/src/widgets/game_grid.dart';
 import 'package:link_five/src/widgets/players_display.dart';
 import 'package:link_five/src/widgets/setup_game_code.dart';
 import 'package:link_five/src/widgets/loading.dart';
@@ -111,6 +112,7 @@ class _HomeState extends State<Home> {
               return Stack(
                 fit: StackFit.expand,
                 children: [
+                  _gameGrid(context),
                   _gameBoard(context),
                   if (setupWidget != null) setupWidget,
                   if (_networkState.players != null &&
@@ -126,6 +128,8 @@ class _HomeState extends State<Home> {
 
   Widget _gameBoard(BuildContext context) => GameBoardWidget(
       gameState: _gameState ?? _preGameState, onClick: _handleGameClick);
+
+  Widget _gameGrid(BuildContext context) => GameGridWidget();
 
   Widget _setupGameCode(BuildContext context) => SetupGameCodeWidget(
         onJoinGameClicked: (String gameCode) => _network.joinGame(gameCode),
