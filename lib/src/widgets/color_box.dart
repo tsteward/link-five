@@ -29,7 +29,7 @@ class ColorBoxWidget extends StatelessWidget {
 
     Color flutterColor = playerColorToFlutterColor[color]!;
     if (!enabled) {
-      flutterColor = playerColorToFlutterColor[color]!.shade300;
+      flutterColor = playerColorToFlutterColor[color]!.shade100;
     }
 
     return InkWell(

@@ -126,8 +126,20 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Widget _gameBoard(BuildContext context) => GameBoardWidget(
-      gameState: _gameState ?? _preGameState, onClick: _handleGameClick);
+  Widget _gameBoard(BuildContext context) {
+    late PlayerColor color;
+    if (_game == null) {
+      color = _preGameState.currentPlayer;
+    } else {
+      color = _networkState.playerColor!;
+    }
+
+    return GameBoardWidget(
+      gameState: _gameState ?? _preGameState,
+      onClick: _handleGameClick,
+      playerColor: color,
+    );
+  }
 
   Widget _gameGrid(BuildContext context) => GameGridWidget();
 
