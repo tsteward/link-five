@@ -28,7 +28,7 @@ class GameStatusWidget extends StatelessWidget {
           child: Row(
             children: [
               OutlinedText(
-                'Game Code ',
+                'Game Code: ',
                 style: TextStyle(fontSize: 24.0),
               ),
               OutlinedText(
