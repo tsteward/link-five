@@ -1,1 +1,1 @@
-const tileSize = 20.0;
+const tileSize = 25.0;
