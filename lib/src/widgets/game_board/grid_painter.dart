@@ -1,7 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:link_five/src/model/game/game_state.dart';
-import 'package:link_five/src/widgets/constants.dart';
 import 'package:link_five/src/widgets/game_board/constants.dart';
 
 class GridPainter extends CustomPainter {
