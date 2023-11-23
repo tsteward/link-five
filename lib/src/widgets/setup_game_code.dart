@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:link_five/src/widgets/game_setup_container.dart';
 
 class SetupGameCodeWidget extends StatefulWidget {

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:link_five/src/model/game/player_color.dart';
 import 'package:link_five/src/model/store/player.dart';
 import 'package:link_five/src/widgets/color_box.dart';
