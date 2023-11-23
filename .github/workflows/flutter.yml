@@ -11,6 +11,10 @@ on:
   pull_request:
     branches: [ main ]
 
+permissions:
+  pages: write
+  id-token: write
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
