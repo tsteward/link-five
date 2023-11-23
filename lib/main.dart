@@ -1,4 +1,3 @@
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:link_five/src/model/game/game_state.dart';
 import 'package:link_five/src/model/game/tile_location.dart';
@@ -84,7 +83,6 @@ class _HomeState extends State<Home> {
   }
 
   Future<void> initialize() async {
-    await Firebase.initializeApp();
     await _network.initialize();
   }
 
