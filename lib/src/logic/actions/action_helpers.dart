@@ -11,9 +11,6 @@ extension AdjacencyChecking on TileLocation {
       _getRelativeTile(gameState, this, _Direction(0, -1), 1) != null;
 }
 
-int nextTurnIndex(GameState gameState) =>
-    (gameState.turnIndex + 1) % gameState.turnOrder.length;
-
 BuiltSet<Tile>? findWin(GameState gameState, Tile startingTile) {
   final directions = const [
     _Direction(1, 0),
