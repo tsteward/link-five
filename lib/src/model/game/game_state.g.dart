@@ -26,8 +26,8 @@ class _$GameStateSerializer implements StructuredSerializer<GameState> {
       serializers.serialize(object.turnOrder,
           specifiedType:
               const FullType(BuiltList, const [const FullType(PlayerColor)])),
-      'turnIndex',
-      serializers.serialize(object.turnIndex,
+      'turnNumber',
+      serializers.serialize(object.turnNumber,
           specifiedType: const FullType(int)),
     ];
     Object? value;
@@ -49,7 +49,7 @@ class _$GameStateSerializer implements StructuredSerializer<GameState> {
 
     final iterator = serialized.iterator;
     while (iterator.moveNext()) {
-      final key = iterator.current as String;
+      final key = iterator.current! as String;
       iterator.moveNext();
       final Object? value = iterator.current;
       switch (key) {
@@ -66,9 +66,9 @@ class _$GameStateSerializer implements StructuredSerializer<GameState> {
                       BuiltList, const [const FullType(PlayerColor)]))!
               as BuiltList<Object?>);
           break;
-        case 'turnIndex':
-          result.turnIndex = serializers.deserialize(value,
-              specifiedType: const FullType(int)) as int;
+        case 'turnNumber':
+          result.turnNumber = serializers.deserialize(value,
+              specifiedType: const FullType(int))! as int;
           break;
         case 'winningTiles':
           result.winningTiles.replace(serializers.deserialize(value,
@@ -89,27 +89,32 @@ class _$GameState extends GameState {
   @override
   final BuiltList<PlayerColor> turnOrder;
   @override
-  final int turnIndex;
+  final int turnNumber;
   @override
   final BuiltSet<Tile>? winningTiles;
   BuiltList<Tile>? __tiles;
+  bool? __tilesAvailable;
 
   factory _$GameState([void Function(GameStateBuilder)? updates]) =>
-      (new GameStateBuilder()..update(updates)).build();
+      (new GameStateBuilder()..update(updates))._build();
 
   _$GameState._(
       {required this.gameBoard,
       required this.turnOrder,
-      required this.turnIndex,
+      required this.turnNumber,
       this.winningTiles})
       : super._() {
-    BuiltValueNullFieldError.checkNotNull(gameBoard, 'GameState', 'gameBoard');
-    BuiltValueNullFieldError.checkNotNull(turnOrder, 'GameState', 'turnOrder');
-    BuiltValueNullFieldError.checkNotNull(turnIndex, 'GameState', 'turnIndex');
+    BuiltValueNullFieldError.checkNotNull(gameBoard, r'GameState', 'gameBoard');
+    BuiltValueNullFieldError.checkNotNull(turnOrder, r'GameState', 'turnOrder');
+    BuiltValueNullFieldError.checkNotNull(
+        turnNumber, r'GameState', 'turnNumber');
   }
 
   @override
   BuiltList<Tile> get tiles => __tiles ??= super.tiles;
+
+  @override
+  bool get tilesAvailable => __tilesAvailable ??= super.tilesAvailable;
 
   @override
   GameState rebuild(void Function(GameStateBuilder) updates) =>
@@ -124,24 +129,27 @@ class _$GameState extends GameState {
     return other is GameState &&
         gameBoard == other.gameBoard &&
         turnOrder == other.turnOrder &&
-        turnIndex == other.turnIndex &&
+        turnNumber == other.turnNumber &&
         winningTiles == other.winningTiles;
   }
 
   @override
   int get hashCode {
-    return $jf($jc(
-        $jc($jc($jc(0, gameBoard.hashCode), turnOrder.hashCode),
-            turnIndex.hashCode),
-        winningTiles.hashCode));
+    var _$hash = 0;
+    _$hash = $jc(_$hash, gameBoard.hashCode);
+    _$hash = $jc(_$hash, turnOrder.hashCode);
+    _$hash = $jc(_$hash, turnNumber.hashCode);
+    _$hash = $jc(_$hash, winningTiles.hashCode);
+    _$hash = $jf(_$hash);
+    return _$hash;
   }
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('GameState')
+    return (newBuiltValueToStringHelper(r'GameState')
           ..add('gameBoard', gameBoard)
           ..add('turnOrder', turnOrder)
-          ..add('turnIndex', turnIndex)
+          ..add('turnNumber', turnNumber)
           ..add('winningTiles', winningTiles))
         .toString();
   }
@@ -162,9 +170,9 @@ class GameStateBuilder implements Builder<GameState, GameStateBuilder> {
   set turnOrder(ListBuilder<PlayerColor>? turnOrder) =>
       _$this._turnOrder = turnOrder;
 
-  int? _turnIndex;
-  int? get turnIndex => _$this._turnIndex;
-  set turnIndex(int? turnIndex) => _$this._turnIndex = turnIndex;
+  int? _turnNumber;
+  int? get turnNumber => _$this._turnNumber;
+  set turnNumber(int? turnNumber) => _$this._turnNumber = turnNumber;
 
   SetBuilder<Tile>? _winningTiles;
   SetBuilder<Tile> get winningTiles =>
@@ -179,7 +187,7 @@ class GameStateBuilder implements Builder<GameState, GameStateBuilder> {
     if ($v != null) {
       _gameBoard = $v.gameBoard.toBuilder();
       _turnOrder = $v.turnOrder.toBuilder();
-      _turnIndex = $v.turnIndex;
+      _turnNumber = $v.turnNumber;
       _winningTiles = $v.winningTiles?.toBuilder();
       _$v = null;
     }
@@ -198,15 +206,17 @@ class GameStateBuilder implements Builder<GameState, GameStateBuilder> {
   }
 
   @override
-  _$GameState build() {
+  GameState build() => _build();
+
+  _$GameState _build() {
     _$GameState _$result;
     try {
       _$result = _$v ??
           new _$GameState._(
               gameBoard: gameBoard.build(),
               turnOrder: turnOrder.build(),
-              turnIndex: BuiltValueNullFieldError.checkNotNull(
-                  turnIndex, 'GameState', 'turnIndex'),
+              turnNumber: BuiltValueNullFieldError.checkNotNull(
+                  turnNumber, r'GameState', 'turnNumber'),
               winningTiles: _winningTiles?.build());
     } catch (_) {
       late String _$failedField;
@@ -220,7 +230,7 @@ class GameStateBuilder implements Builder<GameState, GameStateBuilder> {
         _winningTiles?.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'GameState', _$failedField, e.toString());
+            r'GameState', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -229,4 +239,4 @@ class GameStateBuilder implements Builder<GameState, GameStateBuilder> {
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: deprecated_member_use_from_same_package,type=lint
