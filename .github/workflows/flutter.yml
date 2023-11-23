@@ -35,7 +35,7 @@ jobs:
         run: flutter test
 
       - name: Build
-        run: flutter build web
+        run: flutter build web --base-href "/link-five/"
 
       - name: Deploy
         if: github.ref == 'refs/heads/main'
