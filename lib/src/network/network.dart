@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:built_collection/built_collection.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:link_five/src/logic/actions/place_tile_action.dart';
 import 'package:link_five/src/logic/game_action.dart';
 import 'package:link_five/src/model/game/player_color.dart';
@@ -16,8 +17,7 @@ import 'package:link_five/src/network/words.dart';
 const _letters = 'abcdefghijklmnopqrstuvwxyz';
 
 class Network {
-  final _auth = FirebaseAuth.instance;
-  final _firestore = FirebaseFirestore.instance;
+  FirebaseFirestore? _firestore;
 
   var _state = NetworkState();
   NetworkState get state => _state;
@@ -31,21 +31,27 @@ class Network {
   var _currentActionId = '0';
 
   Future<void> initialize() async {
-    if (_auth.currentUser == null) {
-      await _auth.signInAnonymously();
+    await Firebase.initializeApp();
+    final auth = FirebaseAuth.instance;
+    _firestore = FirebaseFirestore.instance;
+    if (auth.currentUser == null) {
+      await auth.signInAnonymously();
     }
 
-    _setState(state.rebuild((b) => b..userId = _auth.currentUser?.uid));
+    _setState(state.rebuild((b) => b..userId = auth.currentUser?.uid));
   }
 
   Future<void> createGame() async => await joinGame(_generateGameCode());
 
   Future<void> joinGame(String gameCode) async {
+    final firestore = _firestore;
+    if (firestore == null) return;
+
     _setState(state.rebuild((b) => b..gameCode = gameCode));
 
     final random = Random();
 
-    final playersReference = _firestore.collection('/games/$gameCode/players');
+    final playersReference = firestore.collection('/games/$gameCode/players');
     final playersSnapshot = await playersReference.get();
 
     final alreadyJoined =
@@ -77,17 +83,23 @@ class Network {
   }
 
   Future<void> changePlayerInfo(Player player) async {
+    final firestore = _firestore;
+    if (firestore == null) return;
+
     await _startIfEveryoneReady(player);
 
     final playersReference =
-        _firestore.collection('/games/${state.gameCode}/players');
+        firestore.collection('/games/${state.gameCode}/players');
 
     playersReference.doc(state.userId).set(player.toMap()!);
   }
 
   Future<void> sendAction(GameAction action) async {
+    final firestore = _firestore;
+    if (firestore == null) return;
+
     final actionsReference =
-        _firestore.collection('/games/${state.gameCode}/game-action');
+        firestore.collection('/games/${state.gameCode}/game-action');
 
     final storeAction = _toStoreGameAction(action);
 
@@ -99,9 +111,12 @@ class Network {
   }
 
   void _listenForNextAction(String currentActionId) async {
+    final firestore = _firestore;
+    if (firestore == null) return;
+
     _currentActionId = currentActionId;
     final actionsReference =
-        _firestore.collection('/games/${state.gameCode}/game-action');
+        firestore.collection('/games/${state.gameCode}/game-action');
     final actionsStream = actionsReference
         .where('basedOn', isEqualTo: currentActionId)
         .snapshots();
@@ -148,8 +163,11 @@ class Network {
   }
 
   void _listenToGameStartUpdates() async {
+    final firestore = _firestore;
+    if (firestore == null) return;
+
     final startGameReference =
-        _firestore.collection('/games/${state.gameCode}/start-game').doc('0');
+        firestore.collection('/games/${state.gameCode}/start-game').doc('0');
     await for (final snapshot
         in startGameReference.snapshots(includeMetadataChanges: true)) {
       if (snapshot.data() != null) {
@@ -180,6 +198,9 @@ class Network {
   }
 
   Future<void> _startIfEveryoneReady(Player thisPlayer) async {
+    final firestore = _firestore;
+    if (firestore == null) return;
+
     if (thisPlayer.isReady) {
       final otherPlayersAreReady = state.players?.entries.every(
             (player) => player.value.isReady || player.key == state.userId,
@@ -187,7 +208,7 @@ class Network {
           true;
       if (otherPlayersAreReady) {
         final startGameReference =
-            _firestore.collection('/games/${state.gameCode}/start-game');
+            firestore.collection('/games/${state.gameCode}/start-game');
         final startGameDocument = await startGameReference.doc('0').get();
         if (!startGameDocument.exists) {
           final userIds = state.players!.keys.toList();
