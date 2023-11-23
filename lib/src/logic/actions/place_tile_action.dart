@@ -34,9 +34,7 @@ class PlaceTileAction extends GameAction {
     final winningTiles = findWin(gameState, tile);
     if (winningTiles == null) {
       return gameState.rebuild(
-        (b) {
-          b..turnNumber = gameState.turnNumber + 1;
-        },
+        (b) => b..turnNumber = gameState.turnNumber + 1,
       );
     } else {
       return gameState.rebuild(
