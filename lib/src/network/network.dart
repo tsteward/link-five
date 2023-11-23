@@ -5,6 +5,7 @@ import 'package:built_collection/built_collection.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:link_five/firebase_options.dart';
 import 'package:link_five/src/logic/actions/place_tile_action.dart';
 import 'package:link_five/src/logic/game_action.dart';
 import 'package:link_five/src/model/game/player_color.dart';
@@ -31,7 +32,9 @@ class Network {
   var _currentActionId = '0';
 
   Future<void> initialize() async {
-    await Firebase.initializeApp();
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
     final auth = FirebaseAuth.instance;
     _firestore = FirebaseFirestore.instance;
     if (auth.currentUser == null) {

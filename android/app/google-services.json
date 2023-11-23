@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "245508935109",
+    "project_id": "link-five-45afa",
+    "storage_bucket": "link-five-45afa.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:245508935109:android:63587bed4f8d1b982f4fac",
+        "android_client_info": {
+          "package_name": "com.example.link_five"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "245508935109-6iaaovv2clcpamu7mi2k2ish0fg4kngd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCde-N6lnuc2Q7gNcUVXdLw2HHTkCb_MJo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "245508935109-6iaaovv2clcpamu7mi2k2ish0fg4kngd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
