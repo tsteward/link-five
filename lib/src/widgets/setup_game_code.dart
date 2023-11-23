@@ -32,6 +32,8 @@ class _SetupGameCodeWidgetState extends State<SetupGameCodeWidget> {
           child: TextFormField(
             decoration: InputDecoration(labelText: 'Game Code'),
             controller: _gameCodeController,
+            onEditingComplete: () =>
+                widget.onJoinGameClicked(_gameCodeController.text),
           ),
         ),
         Padding(
