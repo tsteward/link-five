@@ -34,9 +34,10 @@ jobs:
       - name: Build
         run: flutter build web --base-href "/link-five/"
 
-      - name: Deploy
-        if: github.ref == 'refs/heads/main'
-        uses: JamesIves/github-pages-deploy-action@v4.4.3
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v2.0.0
         with:
-          branch: gh-pages
-          folder: build/web
+          path: build/web
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v2.0.4
