@@ -18,10 +18,12 @@ class PlaceTileAction extends GameAction {
     final isGameBoardEmpty = gameState.tiles.isEmpty;
     final isLocationEmpty = gameState.tile(location) == null;
     final hasAdjacentTile = location.hasAdjacentTile(gameState);
+    final tilesAvailable = gameState.tilesAvailable;
 
     return isLocationEmpty &&
         (hasAdjacentTile || isGameBoardEmpty) &&
-        !gameState.hasWinner;
+        !gameState.hasWinner &&
+        tilesAvailable;
   }
 
   @override
@@ -32,7 +34,9 @@ class PlaceTileAction extends GameAction {
     final winningTiles = findWin(gameState, tile);
     if (winningTiles == null) {
       return gameState.rebuild(
-        (b) => b..turnIndex = nextTurnIndex(gameState),
+        (b) {
+          b..turnNumber = gameState.turnNumber + 1;
+        },
       );
     } else {
       return gameState.rebuild(

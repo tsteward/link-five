@@ -8,11 +8,13 @@ import 'package:link_five/src/model/game/tile_location.dart';
 part 'game_state.g.dart';
 
 abstract class GameState implements Built<GameState, GameStateBuilder> {
+  static const tilesAvailablePerPlayer = 15;
   static Serializer<GameState> get serializer => _$gameStateSerializer;
 
   BuiltMap<TileLocation, Tile> get gameBoard;
   BuiltList<PlayerColor> get turnOrder;
-  int get turnIndex;
+  int get turnNumber;
+  int get turnIndex => turnNumber % turnOrder.length;
 
   BuiltSet<Tile>? get winningTiles;
 
@@ -21,6 +23,11 @@ abstract class GameState implements Built<GameState, GameStateBuilder> {
 
   @memoized
   BuiltList<Tile> get tiles => gameBoard.values.toBuiltList();
+
+  @memoized
+  bool get tilesAvailable {
+    return turnNumber < tilesAvailablePerPlayer * turnOrder.length;
+  }
 
   Tile? tile(TileLocation location) => gameBoard[location];
 
@@ -31,6 +38,6 @@ abstract class GameState implements Built<GameState, GameStateBuilder> {
   factory GameState([BuiltList<PlayerColor>? turnOrder]) => _$GameState(
         (b) => b
           ..turnOrder = (turnOrder?.toBuilder() ?? ListBuilder<PlayerColor>())
-          ..turnIndex = 0,
+          ..turnNumber = 0,
       );
 }
