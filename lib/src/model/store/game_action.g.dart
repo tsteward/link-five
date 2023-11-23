@@ -67,21 +67,21 @@ class _$GameActionSerializer implements StructuredSerializer<GameAction> {
 
     final iterator = serialized.iterator;
     while (iterator.moveNext()) {
-      final key = iterator.current as String;
+      final key = iterator.current! as String;
       iterator.moveNext();
       final Object? value = iterator.current;
       switch (key) {
         case 'basedOn':
           result.basedOn = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
+              specifiedType: const FullType(String))! as String;
           break;
         case 'userId':
           result.userId = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
+              specifiedType: const FullType(String))! as String;
           break;
         case 'type':
           result.type = serializers.deserialize(value,
-              specifiedType: const FullType(GameActionType)) as GameActionType;
+              specifiedType: const FullType(GameActionType))! as GameActionType;
           break;
         case 'placeTileAction':
           result.placeTileAction.replace(serializers.deserialize(value,
@@ -140,7 +140,7 @@ class _$PlaceTileActionSerializer
 
     final iterator = serialized.iterator;
     while (iterator.moveNext()) {
-      final key = iterator.current as String;
+      final key = iterator.current! as String;
       iterator.moveNext();
       final Object? value = iterator.current;
       switch (key) {
@@ -166,7 +166,7 @@ class _$GameAction extends GameAction {
   final PlaceTileAction? placeTileAction;
 
   factory _$GameAction([void Function(GameActionBuilder)? updates]) =>
-      (new GameActionBuilder()..update(updates)).build();
+      (new GameActionBuilder()..update(updates))._build();
 
   _$GameAction._(
       {required this.basedOn,
@@ -174,9 +174,9 @@ class _$GameAction extends GameAction {
       required this.type,
       this.placeTileAction})
       : super._() {
-    BuiltValueNullFieldError.checkNotNull(basedOn, 'GameAction', 'basedOn');
-    BuiltValueNullFieldError.checkNotNull(userId, 'GameAction', 'userId');
-    BuiltValueNullFieldError.checkNotNull(type, 'GameAction', 'type');
+    BuiltValueNullFieldError.checkNotNull(basedOn, r'GameAction', 'basedOn');
+    BuiltValueNullFieldError.checkNotNull(userId, r'GameAction', 'userId');
+    BuiltValueNullFieldError.checkNotNull(type, r'GameAction', 'type');
   }
 
   @override
@@ -198,14 +198,18 @@ class _$GameAction extends GameAction {
 
   @override
   int get hashCode {
-    return $jf($jc(
-        $jc($jc($jc(0, basedOn.hashCode), userId.hashCode), type.hashCode),
-        placeTileAction.hashCode));
+    var _$hash = 0;
+    _$hash = $jc(_$hash, basedOn.hashCode);
+    _$hash = $jc(_$hash, userId.hashCode);
+    _$hash = $jc(_$hash, type.hashCode);
+    _$hash = $jc(_$hash, placeTileAction.hashCode);
+    _$hash = $jf(_$hash);
+    return _$hash;
   }
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('GameAction')
+    return (newBuiltValueToStringHelper(r'GameAction')
           ..add('basedOn', basedOn)
           ..add('userId', userId)
           ..add('type', type)
@@ -261,17 +265,19 @@ class GameActionBuilder implements Builder<GameAction, GameActionBuilder> {
   }
 
   @override
-  _$GameAction build() {
+  GameAction build() => _build();
+
+  _$GameAction _build() {
     _$GameAction _$result;
     try {
       _$result = _$v ??
           new _$GameAction._(
               basedOn: BuiltValueNullFieldError.checkNotNull(
-                  basedOn, 'GameAction', 'basedOn'),
+                  basedOn, r'GameAction', 'basedOn'),
               userId: BuiltValueNullFieldError.checkNotNull(
-                  userId, 'GameAction', 'userId'),
+                  userId, r'GameAction', 'userId'),
               type: BuiltValueNullFieldError.checkNotNull(
-                  type, 'GameAction', 'type'),
+                  type, r'GameAction', 'type'),
               placeTileAction: _placeTileAction?.build());
     } catch (_) {
       late String _$failedField;
@@ -280,7 +286,7 @@ class GameActionBuilder implements Builder<GameAction, GameActionBuilder> {
         _placeTileAction?.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'GameAction', _$failedField, e.toString());
+            r'GameAction', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -294,11 +300,11 @@ class _$PlaceTileAction extends PlaceTileAction {
   final TileLocation location;
 
   factory _$PlaceTileAction([void Function(PlaceTileActionBuilder)? updates]) =>
-      (new PlaceTileActionBuilder()..update(updates)).build();
+      (new PlaceTileActionBuilder()..update(updates))._build();
 
   _$PlaceTileAction._({required this.location}) : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        location, 'PlaceTileAction', 'location');
+        location, r'PlaceTileAction', 'location');
   }
 
   @override
@@ -317,12 +323,15 @@ class _$PlaceTileAction extends PlaceTileAction {
 
   @override
   int get hashCode {
-    return $jf($jc(0, location.hashCode));
+    var _$hash = 0;
+    _$hash = $jc(_$hash, location.hashCode);
+    _$hash = $jf(_$hash);
+    return _$hash;
   }
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('PlaceTileAction')
+    return (newBuiltValueToStringHelper(r'PlaceTileAction')
           ..add('location', location))
         .toString();
   }
@@ -360,7 +369,9 @@ class PlaceTileActionBuilder
   }
 
   @override
-  _$PlaceTileAction build() {
+  PlaceTileAction build() => _build();
+
+  _$PlaceTileAction _build() {
     _$PlaceTileAction _$result;
     try {
       _$result = _$v ?? new _$PlaceTileAction._(location: location.build());
@@ -371,7 +382,7 @@ class PlaceTileActionBuilder
         location.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'PlaceTileAction', _$failedField, e.toString());
+            r'PlaceTileAction', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -380,4 +391,4 @@ class PlaceTileActionBuilder
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: deprecated_member_use_from_same_package,type=lint

@@ -36,7 +36,7 @@ class _$TileSerializer implements StructuredSerializer<Tile> {
 
     final iterator = serialized.iterator;
     while (iterator.moveNext()) {
-      final key = iterator.current as String;
+      final key = iterator.current! as String;
       iterator.moveNext();
       final Object? value = iterator.current;
       switch (key) {
@@ -46,7 +46,7 @@ class _$TileSerializer implements StructuredSerializer<Tile> {
           break;
         case 'color':
           result.color = serializers.deserialize(value,
-              specifiedType: const FullType(PlayerColor)) as PlayerColor;
+              specifiedType: const FullType(PlayerColor))! as PlayerColor;
           break;
       }
     }
@@ -62,11 +62,11 @@ class _$Tile extends Tile {
   final PlayerColor color;
 
   factory _$Tile([void Function(TileBuilder)? updates]) =>
-      (new TileBuilder()..update(updates)).build();
+      (new TileBuilder()..update(updates))._build();
 
   _$Tile._({required this.location, required this.color}) : super._() {
-    BuiltValueNullFieldError.checkNotNull(location, 'Tile', 'location');
-    BuiltValueNullFieldError.checkNotNull(color, 'Tile', 'color');
+    BuiltValueNullFieldError.checkNotNull(location, r'Tile', 'location');
+    BuiltValueNullFieldError.checkNotNull(color, r'Tile', 'color');
   }
 
   @override
@@ -84,12 +84,16 @@ class _$Tile extends Tile {
 
   @override
   int get hashCode {
-    return $jf($jc($jc(0, location.hashCode), color.hashCode));
+    var _$hash = 0;
+    _$hash = $jc(_$hash, location.hashCode);
+    _$hash = $jc(_$hash, color.hashCode);
+    _$hash = $jf(_$hash);
+    return _$hash;
   }
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('Tile')
+    return (newBuiltValueToStringHelper(r'Tile')
           ..add('location', location)
           ..add('color', color))
         .toString();
@@ -132,14 +136,16 @@ class TileBuilder implements Builder<Tile, TileBuilder> {
   }
 
   @override
-  _$Tile build() {
+  Tile build() => _build();
+
+  _$Tile _build() {
     _$Tile _$result;
     try {
       _$result = _$v ??
           new _$Tile._(
               location: location.build(),
               color: BuiltValueNullFieldError.checkNotNull(
-                  color, 'Tile', 'color'));
+                  color, r'Tile', 'color'));
     } catch (_) {
       late String _$failedField;
       try {
@@ -147,7 +153,7 @@ class TileBuilder implements Builder<Tile, TileBuilder> {
         location.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'Tile', _$failedField, e.toString());
+            r'Tile', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -156,4 +162,4 @@ class TileBuilder implements Builder<Tile, TileBuilder> {
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: deprecated_member_use_from_same_package,type=lint

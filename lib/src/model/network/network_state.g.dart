@@ -61,7 +61,7 @@ class _$NetworkStateSerializer implements StructuredSerializer<NetworkState> {
 
     final iterator = serialized.iterator;
     while (iterator.moveNext()) {
-      final key = iterator.current as String;
+      final key = iterator.current! as String;
       iterator.moveNext();
       final Object? value = iterator.current;
       switch (key) {
@@ -107,7 +107,7 @@ class _$NetworkState extends NetworkState {
   bool ___playerColor = false;
 
   factory _$NetworkState([void Function(NetworkStateBuilder)? updates]) =>
-      (new NetworkStateBuilder()..update(updates)).build();
+      (new NetworkStateBuilder()..update(updates))._build();
 
   _$NetworkState._(
       {this.userId, this.gameCode, this.players, this.turnOrderByUserId})
@@ -153,14 +153,18 @@ class _$NetworkState extends NetworkState {
 
   @override
   int get hashCode {
-    return $jf($jc(
-        $jc($jc($jc(0, userId.hashCode), gameCode.hashCode), players.hashCode),
-        turnOrderByUserId.hashCode));
+    var _$hash = 0;
+    _$hash = $jc(_$hash, userId.hashCode);
+    _$hash = $jc(_$hash, gameCode.hashCode);
+    _$hash = $jc(_$hash, players.hashCode);
+    _$hash = $jc(_$hash, turnOrderByUserId.hashCode);
+    _$hash = $jf(_$hash);
+    return _$hash;
   }
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('NetworkState')
+    return (newBuiltValueToStringHelper(r'NetworkState')
           ..add('userId', userId)
           ..add('gameCode', gameCode)
           ..add('players', players)
@@ -218,7 +222,9 @@ class NetworkStateBuilder
   }
 
   @override
-  _$NetworkState build() {
+  NetworkState build() => _build();
+
+  _$NetworkState _build() {
     _$NetworkState _$result;
     try {
       _$result = _$v ??
@@ -236,7 +242,7 @@ class NetworkStateBuilder
         _turnOrderByUserId?.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'NetworkState', _$failedField, e.toString());
+            r'NetworkState', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -245,4 +251,4 @@ class NetworkStateBuilder
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: deprecated_member_use_from_same_package,type=lint

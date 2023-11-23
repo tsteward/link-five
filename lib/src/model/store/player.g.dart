@@ -38,21 +38,21 @@ class _$PlayerSerializer implements StructuredSerializer<Player> {
 
     final iterator = serialized.iterator;
     while (iterator.moveNext()) {
-      final key = iterator.current as String;
+      final key = iterator.current! as String;
       iterator.moveNext();
       final Object? value = iterator.current;
       switch (key) {
         case 'name':
           result.name = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
+              specifiedType: const FullType(String))! as String;
           break;
         case 'color':
           result.color = serializers.deserialize(value,
-              specifiedType: const FullType(PlayerColor)) as PlayerColor;
+              specifiedType: const FullType(PlayerColor))! as PlayerColor;
           break;
         case 'isReady':
           result.isReady = serializers.deserialize(value,
-              specifiedType: const FullType(bool)) as bool;
+              specifiedType: const FullType(bool))! as bool;
           break;
       }
     }
@@ -70,13 +70,13 @@ class _$Player extends Player {
   final bool isReady;
 
   factory _$Player([void Function(PlayerBuilder)? updates]) =>
-      (new PlayerBuilder()..update(updates)).build();
+      (new PlayerBuilder()..update(updates))._build();
 
   _$Player._({required this.name, required this.color, required this.isReady})
       : super._() {
-    BuiltValueNullFieldError.checkNotNull(name, 'Player', 'name');
-    BuiltValueNullFieldError.checkNotNull(color, 'Player', 'color');
-    BuiltValueNullFieldError.checkNotNull(isReady, 'Player', 'isReady');
+    BuiltValueNullFieldError.checkNotNull(name, r'Player', 'name');
+    BuiltValueNullFieldError.checkNotNull(color, r'Player', 'color');
+    BuiltValueNullFieldError.checkNotNull(isReady, r'Player', 'isReady');
   }
 
   @override
@@ -97,13 +97,17 @@ class _$Player extends Player {
 
   @override
   int get hashCode {
-    return $jf(
-        $jc($jc($jc(0, name.hashCode), color.hashCode), isReady.hashCode));
+    var _$hash = 0;
+    _$hash = $jc(_$hash, name.hashCode);
+    _$hash = $jc(_$hash, color.hashCode);
+    _$hash = $jc(_$hash, isReady.hashCode);
+    _$hash = $jf(_$hash);
+    return _$hash;
   }
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('Player')
+    return (newBuiltValueToStringHelper(r'Player')
           ..add('name', name)
           ..add('color', color)
           ..add('isReady', isReady))
@@ -151,17 +155,20 @@ class PlayerBuilder implements Builder<Player, PlayerBuilder> {
   }
 
   @override
-  _$Player build() {
+  Player build() => _build();
+
+  _$Player _build() {
     final _$result = _$v ??
         new _$Player._(
-            name: BuiltValueNullFieldError.checkNotNull(name, 'Player', 'name'),
-            color:
-                BuiltValueNullFieldError.checkNotNull(color, 'Player', 'color'),
+            name:
+                BuiltValueNullFieldError.checkNotNull(name, r'Player', 'name'),
+            color: BuiltValueNullFieldError.checkNotNull(
+                color, r'Player', 'color'),
             isReady: BuiltValueNullFieldError.checkNotNull(
-                isReady, 'Player', 'isReady'));
+                isReady, r'Player', 'isReady'));
     replace(_$result);
     return _$result;
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: deprecated_member_use_from_same_package,type=lint
