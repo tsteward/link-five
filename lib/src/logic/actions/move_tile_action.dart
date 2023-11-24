@@ -5,23 +5,20 @@ import 'package:link_five/src/model/game/tile.dart';
 import 'package:link_five/src/model/game/tile_location.dart';
 
 class MoveTileAction extends GameAction {
-  final TileLocation _source;
-  final TileLocation _destination;
-  TileLocation get source => _source;
-  TileLocation get destination => _destination;
+  final TileLocation source;
+  final TileLocation destination;
 
   MoveTileAction({
     required super.playerColor,
-    required TileLocation source,
-    required TileLocation destination,
-  })  : _destination = destination,
-        _source = source;
+    required this.source,
+    required this.destination,
+  });
 
   @override
   bool isPermitted(GameState gameState) {
-    final isSourceTileCorrect = gameState.tile(_source)?.color == playerColor;
-    final isLocationEmpty = gameState.tile(_destination) == null;
-    final hasAdjacentTile = _destination.hasAdjacentTile(gameState);
+    final isSourceTileCorrect = gameState.tile(source)?.color == playerColor;
+    final isLocationEmpty = gameState.tile(destination) == null;
+    final hasAdjacentTile = destination.hasAdjacentTile(gameState);
     final tilesAvailable = gameState.tilesAvailable;
 
     return isLocationEmpty &&
@@ -39,9 +36,9 @@ class MoveTileAction extends GameAction {
 
   @override
   GameState applyAction(GameState gameState) {
-    final tile = Tile(location: _destination, color: playerColor);
+    final tile = Tile(location: destination, color: playerColor);
     gameState = gameState.placeTile(tile);
-    gameState = gameState.removeTile(_source);
+    gameState = gameState.removeTile(source);
 
     return postMoveUpdate(gameState, tile);
   }
