@@ -158,6 +158,8 @@ class _HomeState extends State<Home> {
         currentTurn: _gameState!.currentPlayer,
         userColor: _networkState.playerColor!,
         gameCode: _networkState.gameCode ?? '',
+        turnOrder: _gameState!.turnOrder.asList(),
+        turnNumber: _gameState!.turnNumber,
       );
 
   void _handleGameClick(TileLocation location) {
