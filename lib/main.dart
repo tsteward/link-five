@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:link_five/src/controller/click_handler.dart';
+import 'package:link_five/src/model/clicker/click_handler.dart';
 import 'package:link_five/src/logic/game_action.dart';
 import 'package:link_five/src/model/game/game_state.dart';
 import 'package:link_five/src/model/game/tile_location.dart';
@@ -42,11 +42,12 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   final Network _network = Network();
   final _preGame = Game(turnOrder: PlayerColor.values.toList());
-  final ClickHandler clickHandler = ClickHandler();
+  final ClickHandler _clickHandler = ClickHandler();
   Game? _game;
 
   GameState _preGameState = GameState();
   GameState? _gameState;
+  TileLocation? _source;
   NetworkState _networkState = NetworkState();
   Future<void>? _initialization;
 
@@ -57,6 +58,7 @@ class _HomeState extends State<Home> {
     setState(() {
       _preGameState = _preGame.state;
       _networkState = _network.state;
+      _source = _clickHandler.source;
       _initialization = initialize();
     });
 
@@ -65,6 +67,9 @@ class _HomeState extends State<Home> {
     );
     _network.stateStream.listen(
       (networkState) => setState(() => _networkState = networkState),
+    );
+    _clickHandler.stateStream.listen(
+      (source) => setState(() => _source = source),
     );
     _network.stateStream
         .firstWhere((state) => state.hasGameStarted)
@@ -138,6 +143,7 @@ class _HomeState extends State<Home> {
       gameState: _gameState ?? _preGameState,
       onClick: _handleGameClick,
       playerColor: color,
+      selectedLocation: _source,
     );
   }
 
@@ -165,10 +171,10 @@ class _HomeState extends State<Home> {
   void _handleGameClick(TileLocation location) {
     GameAction? action;
     if (_game == null) {
-      action = clickHandler.handleGameClick(
+      action = _clickHandler.handleGameClick(
           _preGame.state, location, _preGameState.currentPlayer);
     } else {
-      action = clickHandler.handleGameClick(
+      action = _clickHandler.handleGameClick(
           _game!.state, location, _gameState!.currentPlayer);
     }
     if (action == null) {
@@ -176,10 +182,8 @@ class _HomeState extends State<Home> {
     }
     if (_game == null) {
       _preGame.applyAction(action);
-    } else {
-      if (_game!.isPermitted(action)) {
-        _network.sendAction(action);
-      }
+    } else if (_game!.isPermitted(action)) {
+      _network.sendAction(action);
     }
   }
 }

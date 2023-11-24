@@ -8,11 +8,13 @@ import 'package:link_five/src/widgets/game_board/constants.dart';
 class TilePainter extends CustomPainter {
   final GameState gameState;
   final TileLocation? hoverLocation;
+  final TileLocation? selectedLocation;
   final PlayerColor? hoverColor;
 
   TilePainter({
     required this.gameState,
     required this.hoverLocation,
+    required this.selectedLocation,
     required this.hoverColor,
   });
 
@@ -37,12 +39,22 @@ class TilePainter extends CustomPainter {
       }
     }
 
-    if (hoverLocation != null && hoverColor != null) {
+    if (hoverLocation != null &&
+        hoverColor != null &&
+        selectedLocation != hoverLocation) {
       final tileCenter = hoverLocation!.toOffset(size);
       canvas.drawTile(
           center: tileCenter,
           color: playerColorToFlutterColor[hoverColor]!.shade100,
           strokeColor: Colors.grey);
+    }
+
+    if (selectedLocation != null && hoverColor != null) {
+      final tileCenter = selectedLocation!.toOffset(size);
+      canvas.drawTile(
+          center: tileCenter,
+          color: playerColorToFlutterColor[hoverColor]!.shade100,
+          strokeColor: Colors.blue);
     }
   }
 
@@ -50,7 +62,8 @@ class TilePainter extends CustomPainter {
   bool shouldRepaint(TilePainter oldDelegate) {
     return oldDelegate.gameState != gameState ||
         oldDelegate.hoverLocation != hoverLocation ||
-        oldDelegate.hoverColor != hoverColor;
+        oldDelegate.hoverColor != hoverColor ||
+        oldDelegate.selectedLocation != selectedLocation;
   }
 }
 
