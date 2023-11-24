@@ -8,11 +8,15 @@ part of 'game_action.dart';
 
 const GameActionType _$placeTileAction =
     const GameActionType._('placeTileAction');
+const GameActionType _$moveTileAction =
+    const GameActionType._('moveTileAction');
 
 GameActionType _$stValueOf(String name) {
   switch (name) {
     case 'placeTileAction':
       return _$placeTileAction;
+    case 'moveTileAction':
+      return _$moveTileAction;
     default:
       throw new ArgumentError(name);
   }
@@ -21,6 +25,7 @@ GameActionType _$stValueOf(String name) {
 final BuiltSet<GameActionType> _$stValues =
     new BuiltSet<GameActionType>(const <GameActionType>[
   _$placeTileAction,
+  _$moveTileAction,
 ]);
 
 Serializer<GameAction> _$gameActionSerializer = new _$GameActionSerializer();
@@ -28,6 +33,8 @@ Serializer<GameActionType> _$gameActionTypeSerializer =
     new _$GameActionTypeSerializer();
 Serializer<PlaceTileAction> _$placeTileActionSerializer =
     new _$PlaceTileActionSerializer();
+Serializer<MoveTileAction> _$moveTileActionSerializer =
+    new _$MoveTileActionSerializer();
 
 class _$GameActionSerializer implements StructuredSerializer<GameAction> {
   @override
@@ -56,6 +63,13 @@ class _$GameActionSerializer implements StructuredSerializer<GameAction> {
         ..add('placeTileAction')
         ..add(serializers.serialize(value,
             specifiedType: const FullType(PlaceTileAction)));
+    }
+    value = object.moveTileAction;
+    if (value != null) {
+      result
+        ..add('moveTileAction')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(MoveTileAction)));
     }
     return result;
   }
@@ -87,6 +101,11 @@ class _$GameActionSerializer implements StructuredSerializer<GameAction> {
           result.placeTileAction.replace(serializers.deserialize(value,
                   specifiedType: const FullType(PlaceTileAction))!
               as PlaceTileAction);
+          break;
+        case 'moveTileAction':
+          result.moveTileAction.replace(serializers.deserialize(value,
+                  specifiedType: const FullType(MoveTileAction))!
+              as MoveTileAction);
           break;
       }
     }
@@ -155,6 +174,55 @@ class _$PlaceTileActionSerializer
   }
 }
 
+class _$MoveTileActionSerializer
+    implements StructuredSerializer<MoveTileAction> {
+  @override
+  final Iterable<Type> types = const [MoveTileAction, _$MoveTileAction];
+  @override
+  final String wireName = 'MoveTileAction';
+
+  @override
+  Iterable<Object?> serialize(Serializers serializers, MoveTileAction object,
+      {FullType specifiedType = FullType.unspecified}) {
+    final result = <Object?>[
+      'sourceLocation',
+      serializers.serialize(object.sourceLocation,
+          specifiedType: const FullType(TileLocation)),
+      'destinationLocation',
+      serializers.serialize(object.destinationLocation,
+          specifiedType: const FullType(TileLocation)),
+    ];
+
+    return result;
+  }
+
+  @override
+  MoveTileAction deserialize(
+      Serializers serializers, Iterable<Object?> serialized,
+      {FullType specifiedType = FullType.unspecified}) {
+    final result = new MoveTileActionBuilder();
+
+    final iterator = serialized.iterator;
+    while (iterator.moveNext()) {
+      final key = iterator.current! as String;
+      iterator.moveNext();
+      final Object? value = iterator.current;
+      switch (key) {
+        case 'sourceLocation':
+          result.sourceLocation.replace(serializers.deserialize(value,
+              specifiedType: const FullType(TileLocation))! as TileLocation);
+          break;
+        case 'destinationLocation':
+          result.destinationLocation.replace(serializers.deserialize(value,
+              specifiedType: const FullType(TileLocation))! as TileLocation);
+          break;
+      }
+    }
+
+    return result.build();
+  }
+}
+
 class _$GameAction extends GameAction {
   @override
   final String basedOn;
@@ -164,6 +232,8 @@ class _$GameAction extends GameAction {
   final GameActionType type;
   @override
   final PlaceTileAction? placeTileAction;
+  @override
+  final MoveTileAction? moveTileAction;
 
   factory _$GameAction([void Function(GameActionBuilder)? updates]) =>
       (new GameActionBuilder()..update(updates))._build();
@@ -172,7 +242,8 @@ class _$GameAction extends GameAction {
       {required this.basedOn,
       required this.userId,
       required this.type,
-      this.placeTileAction})
+      this.placeTileAction,
+      this.moveTileAction})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(basedOn, r'GameAction', 'basedOn');
     BuiltValueNullFieldError.checkNotNull(userId, r'GameAction', 'userId');
@@ -193,7 +264,8 @@ class _$GameAction extends GameAction {
         basedOn == other.basedOn &&
         userId == other.userId &&
         type == other.type &&
-        placeTileAction == other.placeTileAction;
+        placeTileAction == other.placeTileAction &&
+        moveTileAction == other.moveTileAction;
   }
 
   @override
@@ -203,6 +275,7 @@ class _$GameAction extends GameAction {
     _$hash = $jc(_$hash, userId.hashCode);
     _$hash = $jc(_$hash, type.hashCode);
     _$hash = $jc(_$hash, placeTileAction.hashCode);
+    _$hash = $jc(_$hash, moveTileAction.hashCode);
     _$hash = $jf(_$hash);
     return _$hash;
   }
@@ -213,7 +286,8 @@ class _$GameAction extends GameAction {
           ..add('basedOn', basedOn)
           ..add('userId', userId)
           ..add('type', type)
-          ..add('placeTileAction', placeTileAction))
+          ..add('placeTileAction', placeTileAction)
+          ..add('moveTileAction', moveTileAction))
         .toString();
   }
 }
@@ -239,6 +313,12 @@ class GameActionBuilder implements Builder<GameAction, GameActionBuilder> {
   set placeTileAction(PlaceTileActionBuilder? placeTileAction) =>
       _$this._placeTileAction = placeTileAction;
 
+  MoveTileActionBuilder? _moveTileAction;
+  MoveTileActionBuilder get moveTileAction =>
+      _$this._moveTileAction ??= new MoveTileActionBuilder();
+  set moveTileAction(MoveTileActionBuilder? moveTileAction) =>
+      _$this._moveTileAction = moveTileAction;
+
   GameActionBuilder();
 
   GameActionBuilder get _$this {
@@ -248,6 +328,7 @@ class GameActionBuilder implements Builder<GameAction, GameActionBuilder> {
       _userId = $v.userId;
       _type = $v.type;
       _placeTileAction = $v.placeTileAction?.toBuilder();
+      _moveTileAction = $v.moveTileAction?.toBuilder();
       _$v = null;
     }
     return this;
@@ -278,12 +359,15 @@ class GameActionBuilder implements Builder<GameAction, GameActionBuilder> {
                   userId, r'GameAction', 'userId'),
               type: BuiltValueNullFieldError.checkNotNull(
                   type, r'GameAction', 'type'),
-              placeTileAction: _placeTileAction?.build());
+              placeTileAction: _placeTileAction?.build(),
+              moveTileAction: _moveTileAction?.build());
     } catch (_) {
       late String _$failedField;
       try {
         _$failedField = 'placeTileAction';
         _placeTileAction?.build();
+        _$failedField = 'moveTileAction';
+        _moveTileAction?.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
             r'GameAction', _$failedField, e.toString());
@@ -383,6 +467,125 @@ class PlaceTileActionBuilder
       } catch (e) {
         throw new BuiltValueNestedFieldError(
             r'PlaceTileAction', _$failedField, e.toString());
+      }
+      rethrow;
+    }
+    replace(_$result);
+    return _$result;
+  }
+}
+
+class _$MoveTileAction extends MoveTileAction {
+  @override
+  final TileLocation sourceLocation;
+  @override
+  final TileLocation destinationLocation;
+
+  factory _$MoveTileAction([void Function(MoveTileActionBuilder)? updates]) =>
+      (new MoveTileActionBuilder()..update(updates))._build();
+
+  _$MoveTileAction._(
+      {required this.sourceLocation, required this.destinationLocation})
+      : super._() {
+    BuiltValueNullFieldError.checkNotNull(
+        sourceLocation, r'MoveTileAction', 'sourceLocation');
+    BuiltValueNullFieldError.checkNotNull(
+        destinationLocation, r'MoveTileAction', 'destinationLocation');
+  }
+
+  @override
+  MoveTileAction rebuild(void Function(MoveTileActionBuilder) updates) =>
+      (toBuilder()..update(updates)).build();
+
+  @override
+  MoveTileActionBuilder toBuilder() =>
+      new MoveTileActionBuilder()..replace(this);
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(other, this)) return true;
+    return other is MoveTileAction &&
+        sourceLocation == other.sourceLocation &&
+        destinationLocation == other.destinationLocation;
+  }
+
+  @override
+  int get hashCode {
+    var _$hash = 0;
+    _$hash = $jc(_$hash, sourceLocation.hashCode);
+    _$hash = $jc(_$hash, destinationLocation.hashCode);
+    _$hash = $jf(_$hash);
+    return _$hash;
+  }
+
+  @override
+  String toString() {
+    return (newBuiltValueToStringHelper(r'MoveTileAction')
+          ..add('sourceLocation', sourceLocation)
+          ..add('destinationLocation', destinationLocation))
+        .toString();
+  }
+}
+
+class MoveTileActionBuilder
+    implements Builder<MoveTileAction, MoveTileActionBuilder> {
+  _$MoveTileAction? _$v;
+
+  TileLocationBuilder? _sourceLocation;
+  TileLocationBuilder get sourceLocation =>
+      _$this._sourceLocation ??= new TileLocationBuilder();
+  set sourceLocation(TileLocationBuilder? sourceLocation) =>
+      _$this._sourceLocation = sourceLocation;
+
+  TileLocationBuilder? _destinationLocation;
+  TileLocationBuilder get destinationLocation =>
+      _$this._destinationLocation ??= new TileLocationBuilder();
+  set destinationLocation(TileLocationBuilder? destinationLocation) =>
+      _$this._destinationLocation = destinationLocation;
+
+  MoveTileActionBuilder();
+
+  MoveTileActionBuilder get _$this {
+    final $v = _$v;
+    if ($v != null) {
+      _sourceLocation = $v.sourceLocation.toBuilder();
+      _destinationLocation = $v.destinationLocation.toBuilder();
+      _$v = null;
+    }
+    return this;
+  }
+
+  @override
+  void replace(MoveTileAction other) {
+    ArgumentError.checkNotNull(other, 'other');
+    _$v = other as _$MoveTileAction;
+  }
+
+  @override
+  void update(void Function(MoveTileActionBuilder)? updates) {
+    if (updates != null) updates(this);
+  }
+
+  @override
+  MoveTileAction build() => _build();
+
+  _$MoveTileAction _build() {
+    _$MoveTileAction _$result;
+    try {
+      _$result = _$v ??
+          new _$MoveTileAction._(
+              sourceLocation: sourceLocation.build(),
+              destinationLocation: destinationLocation.build());
+    } catch (_) {
+      late String _$failedField;
+      try {
+        _$failedField = 'sourceLocation';
+        sourceLocation.build();
+        _$failedField = 'destinationLocation';
+        destinationLocation.build();
+      } catch (e) {
+        throw new BuiltValueNestedFieldError(
+            r'MoveTileAction', _$failedField, e.toString());
       }
       rethrow;
     }
