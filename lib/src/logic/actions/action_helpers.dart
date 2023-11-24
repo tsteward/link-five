@@ -5,10 +5,10 @@ import 'package:link_five/src/model/game/tile_location.dart';
 
 extension AdjacencyChecking on TileLocation {
   bool hasAdjacentTile(GameState gameState) =>
-      _getRelativeTile(gameState, this, _Direction(1, 0), 1) != null ||
-      _getRelativeTile(gameState, this, _Direction(-1, 0), 1) != null ||
-      _getRelativeTile(gameState, this, _Direction(0, 1), 1) != null ||
-      _getRelativeTile(gameState, this, _Direction(0, -1), 1) != null;
+      _getRelativeTile(gameState, this, const _Direction(1, 0), 1) != null ||
+      _getRelativeTile(gameState, this, const _Direction(-1, 0), 1) != null ||
+      _getRelativeTile(gameState, this, const _Direction(0, 1), 1) != null ||
+      _getRelativeTile(gameState, this, const _Direction(0, -1), 1) != null;
 }
 
 bool hasNoOrphans(GameState gameState) {
@@ -22,10 +22,10 @@ void _hasNoOrphansRecursive(
     GameState gameState, Set<TileLocation> set, TileLocation location) {
   if (!set.contains(location)) {
     set.add(location);
-    _checkDirection(gameState, location, _Direction(1, 0), set);
-    _checkDirection(gameState, location, _Direction(-1, 0), set);
-    _checkDirection(gameState, location, _Direction(0, 1), set);
-    _checkDirection(gameState, location, _Direction(0, -1), set);
+    _checkDirection(gameState, location, const _Direction(1, 0), set);
+    _checkDirection(gameState, location, const _Direction(-1, 0), set);
+    _checkDirection(gameState, location, const _Direction(0, 1), set);
+    _checkDirection(gameState, location, const _Direction(0, -1), set);
   }
 }
 
@@ -38,7 +38,7 @@ void _checkDirection(GameState gameState, TileLocation location, _Direction dir,
 }
 
 BuiltSet<Tile>? findWin(GameState gameState, Tile startingTile) {
-  final directions = const [
+  const directions = [
     _Direction(1, 0),
     _Direction(1, 1),
     _Direction(0, 1),

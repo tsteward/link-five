@@ -35,7 +35,7 @@ class GameActionType extends EnumClass {
 
   static const GameActionType placeTileAction = _$placeTileAction;
 
-  const GameActionType._(String name) : super(name);
+  const GameActionType._(super.name);
 
   static BuiltSet<GameActionType> get values => _$stValues;
   static GameActionType valueOf(String name) => _$stValueOf(name);

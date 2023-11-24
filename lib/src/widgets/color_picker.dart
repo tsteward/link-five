@@ -3,13 +3,13 @@ import 'package:link_five/src/model/game/player_color.dart';
 import 'package:link_five/src/widgets/color_box.dart';
 
 class ColorPickerWidget extends StatelessWidget {
-  ColorPickerWidget({
-    Key? key,
+  const ColorPickerWidget({
+    super.key,
     required this.selectedColor,
     required this.onColorSelected,
     this.disabledColors = const {},
     this.enabled = true,
-  }) : super(key: key);
+  });
 
   final PlayerColor? selectedColor;
   final Function(PlayerColor) onColorSelected;
