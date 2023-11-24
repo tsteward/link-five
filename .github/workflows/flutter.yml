@@ -43,5 +43,6 @@ jobs:
         with:
           path: build/web
       - name: Deploy to GitHub Pages
+        if: github.ref == 'refs/heads/main'
         id: deployment
         uses: actions/deploy-pages@v2.0.4
