@@ -4,11 +4,16 @@ import 'package:link_five/src/model/game/tile.dart';
 import 'package:link_five/src/model/game/tile_location.dart';
 
 extension AdjacencyChecking on TileLocation {
-  bool hasAdjacentTile(GameState gameState) =>
-      _getRelativeTile(gameState, this, _Direction(1, 0), 1) != null ||
-      _getRelativeTile(gameState, this, _Direction(-1, 0), 1) != null ||
-      _getRelativeTile(gameState, this, _Direction(0, 1), 1) != null ||
-      _getRelativeTile(gameState, this, _Direction(0, -1), 1) != null;
+  bool hasAdjacentTile(GameState gameState, [TileLocation? location]) =>
+      isOccupied(gameState, location, _Direction(1, 0)) ||
+      isOccupied(gameState, location, _Direction(-1, 0)) ||
+      isOccupied(gameState, location, _Direction(0, 1)) ||
+      isOccupied(gameState, location, _Direction(0, -1));
+
+  bool isOccupied(GameState gameState, TileLocation? location, _Direction dir) {
+    return _getRelativeTile(gameState, this, dir, 1) != null &&
+        _getRelativeTile(gameState, this, dir, 1)?.location != location;
+  }
 }
 
 BuiltSet<Tile>? findWin(GameState gameState, Tile startingTile) {

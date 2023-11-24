@@ -8,7 +8,7 @@ import 'package:link_five/src/model/game/tile_location.dart';
 part 'game_state.g.dart';
 
 abstract class GameState implements Built<GameState, GameStateBuilder> {
-  static const tilesAvailablePerPlayer = 15;
+  static const tilesAvailablePerPlayer = 1;
   static Serializer<GameState> get serializer => _$gameStateSerializer;
 
   BuiltMap<TileLocation, Tile> get gameBoard;

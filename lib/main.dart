@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:link_five/src/controller/click_handler.dart';
+import 'package:link_five/src/logic/game_action.dart';
 import 'package:link_five/src/model/game/game_state.dart';
 import 'package:link_five/src/model/game/tile_location.dart';
 import 'package:link_five/src/network/network.dart';
@@ -41,6 +43,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   final Network _network = Network();
   final _preGame = Game(turnOrder: PlayerColor.values.toList());
+  final ClickHandler clickHandler = ClickHandler();
   Game? _game;
 
   GameState _preGameState = GameState();
@@ -161,19 +164,20 @@ class _HomeState extends State<Home> {
       );
 
   void _handleGameClick(TileLocation location) {
+    GameAction? action;
     if (_game == null) {
-      _preGame.applyAction(
-        PlaceTileAction(
-          playerColor: _preGameState.currentPlayer,
-          location: location,
-        ),
-      );
+      action = clickHandler.handleGameClick(
+          _preGame.state, location, _preGameState.currentPlayer);
     } else {
-      final action = PlaceTileAction(
-        playerColor: _networkState.playerColor!,
-        location: location,
-      );
-
+      action = clickHandler.handleGameClick(
+          _game!.state, location, _gameState!.currentPlayer);
+    }
+    if (action == null) {
+      return;
+    }
+    if (_game == null) {
+      _preGame.applyAction(action);
+    } else {
       if (_game!.isPermitted(action)) {
         _network.sendAction(action);
       }
