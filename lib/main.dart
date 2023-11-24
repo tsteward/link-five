@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:link_five/src/logic/interaction/click_handler.dart';
+import 'package:link_five/src/logic/game_action.dart';
 import 'package:link_five/src/model/game/game_state.dart';
 import 'package:link_five/src/model/game/tile_location.dart';
 import 'package:link_five/src/network/network.dart';
-import 'package:link_five/src/logic/actions/place_tile_action.dart';
 import 'package:link_five/src/logic/game.dart';
 import 'package:link_five/src/model/game/player_color.dart';
 import 'package:link_five/src/model/network/network_state.dart';
@@ -41,10 +42,12 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   final Network _network = Network();
   final _preGame = Game(turnOrder: PlayerColor.values.toList());
+  final ClickHandler _clickHandler = ClickHandler();
   Game? _game;
 
   GameState _preGameState = GameState();
   GameState? _gameState;
+  TileLocation? _selectedLocation;
   NetworkState _networkState = NetworkState();
   Future<void>? _initialization;
 
@@ -55,6 +58,7 @@ class _HomeState extends State<Home> {
     setState(() {
       _preGameState = _preGame.state;
       _networkState = _network.state;
+      _selectedLocation = _clickHandler.selectedLocation;
       _initialization = initialize();
     });
 
@@ -63,6 +67,9 @@ class _HomeState extends State<Home> {
     );
     _network.stateStream.listen(
       (networkState) => setState(() => _networkState = networkState),
+    );
+    _clickHandler.stateStream.listen(
+      (source) => setState(() => _selectedLocation = source),
     );
     _network.stateStream
         .firstWhere((state) => state.hasGameStarted)
@@ -136,6 +143,7 @@ class _HomeState extends State<Home> {
       gameState: _gameState ?? _preGameState,
       onClick: _handleGameClick,
       playerColor: color,
+      selectedLocation: _selectedLocation,
     );
   }
 
@@ -163,22 +171,21 @@ class _HomeState extends State<Home> {
       );
 
   void _handleGameClick(TileLocation location) {
+    GameAction? action;
     if (_game == null) {
-      _preGame.applyAction(
-        PlaceTileAction(
-          playerColor: _preGameState.currentPlayer,
-          location: location,
-        ),
-      );
+      action = _clickHandler.handleGameClick(
+          _preGame.state, location, _preGameState.currentPlayer);
     } else {
-      final action = PlaceTileAction(
-        playerColor: _networkState.playerColor!,
-        location: location,
-      );
-
-      if (_game!.isPermitted(action)) {
-        _network.sendAction(action);
-      }
+      action = _clickHandler.handleGameClick(
+          _game!.state, location, _gameState!.currentPlayer);
+    }
+    if (action == null) {
+      return;
+    }
+    if (_game == null) {
+      _preGame.applyAction(action);
+    } else if (_game!.isPermitted(action)) {
+      _network.sendAction(action);
     }
   }
 }
