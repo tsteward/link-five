@@ -19,7 +19,7 @@ class MoveTileAction extends GameAction {
   bool isPermitted(GameState gameState) {
     final isSourceTileCorrect = gameState.tile(source)?.color == playerColor;
     final isLocationEmpty = gameState.tile(destination) == null;
-    final hasAdjacentTile = destination.hasAdjacentTile(gameState, source);
+    final hasAdjacentTile = destination.hasAdjacentTile(gameState);
     final tilesAvailable = gameState.tilesAvailable;
 
     return isLocationEmpty &&

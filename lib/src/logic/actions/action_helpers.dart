@@ -4,21 +4,11 @@ import 'package:link_five/src/model/game/tile.dart';
 import 'package:link_five/src/model/game/tile_location.dart';
 
 extension AdjacencyChecking on TileLocation {
-  bool hasAdjacentTile(GameState gameState, [TileLocation? location]) =>
-      _isOccupied(gameState, location, _Direction(1, 0)) ||
-      _isOccupied(gameState, location, _Direction(-1, 0)) ||
-      _isOccupied(gameState, location, _Direction(0, 1)) ||
-      _isOccupied(gameState, location, _Direction(0, -1));
-
-  bool _isOccupied(
-      GameState gameState, TileLocation? location, _Direction dir) {
-    if (location == null) {
-      return _getRelativeTile(gameState, this, dir, 1) != null;
-    } else {
-      return _getRelativeTile(gameState, this, dir, 1) != null &&
-          _getRelativeLocation(location, dir, 1) != location;
-    }
-  }
+  bool hasAdjacentTile(GameState gameState) =>
+      _getRelativeTile(gameState, this, _Direction(1, 0), 1) != null ||
+      _getRelativeTile(gameState, this, _Direction(-1, 0), 1) != null ||
+      _getRelativeTile(gameState, this, _Direction(0, 1), 1) != null ||
+      _getRelativeTile(gameState, this, _Direction(0, -1), 1) != null;
 }
 
 bool hasNoOrphans(GameState gameState) {
