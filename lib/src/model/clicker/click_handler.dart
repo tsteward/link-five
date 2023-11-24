@@ -26,12 +26,12 @@ class ClickHandler {
     } else {
       final colorAtLocation = state.gameBoard[location]?.color;
       if (_source == null) {
-        if (colorAtLocation != null && colorAtLocation == playerColor) {
+        if (colorAtLocation == playerColor) {
           _setSource(location);
         }
         return null;
       } else {
-        if (colorAtLocation != null && colorAtLocation == playerColor) {
+        if (colorAtLocation == playerColor) {
           if (location == _source) {
             _setSource(null);
           } else {
