@@ -105,6 +105,7 @@ class SetupPlayersWidgetState extends State<SetupPlayersWidget> {
               decoration: const InputDecoration(labelText: 'Name'),
               enabled: !_player!.isReady,
               controller: _gameCodeController,
+              maxLength: 25,
             ),
           ),
         if (_player != null)
