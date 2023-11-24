@@ -5,8 +5,8 @@ import 'package:link_five/src/model/game/tile.dart';
 import 'package:link_five/src/model/game/tile_location.dart';
 
 class MoveTileAction extends GameAction {
-  TileLocation _source;
-  TileLocation _destination;
+  final TileLocation _source;
+  final TileLocation _destination;
   TileLocation get source => _source;
   TileLocation get destination => _destination;
 

@@ -177,7 +177,7 @@ class HomeState extends State<Home> {
     if (_game == null) {
       action = _clickHandler.handleGameClick(
           _preGame.state, location, _preGameState.currentPlayer);
-    } else {
+    } else if (_gameState?.currentPlayer == _networkState.playerColor) {
       action = _clickHandler.handleGameClick(
           _game!.state, location, _gameState!.currentPlayer);
     }
