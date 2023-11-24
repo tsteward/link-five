@@ -47,7 +47,7 @@ class _HomeState extends State<Home> {
 
   GameState _preGameState = GameState();
   GameState? _gameState;
-  TileLocation? _source;
+  TileLocation? _selectedLocation;
   NetworkState _networkState = NetworkState();
   Future<void>? _initialization;
 
@@ -58,7 +58,7 @@ class _HomeState extends State<Home> {
     setState(() {
       _preGameState = _preGame.state;
       _networkState = _network.state;
-      _source = _clickHandler.source;
+      _selectedLocation = _clickHandler.selectedLocation;
       _initialization = initialize();
     });
 
@@ -69,7 +69,7 @@ class _HomeState extends State<Home> {
       (networkState) => setState(() => _networkState = networkState),
     );
     _clickHandler.stateStream.listen(
-      (source) => setState(() => _source = source),
+      (source) => setState(() => _selectedLocation = source),
     );
     _network.stateStream
         .firstWhere((state) => state.hasGameStarted)
@@ -143,7 +143,7 @@ class _HomeState extends State<Home> {
       gameState: _gameState ?? _preGameState,
       onClick: _handleGameClick,
       playerColor: color,
-      selectedLocation: _source,
+      selectedLocation: _selectedLocation,
     );
   }
 

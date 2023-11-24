@@ -8,8 +8,8 @@ import 'package:link_five/src/model/game/player_color.dart';
 import 'package:link_five/src/model/game/tile_location.dart';
 
 class ClickHandler {
-  TileLocation? _source;
-  TileLocation? get source => _source;
+  TileLocation? _selectedLocation;
+  TileLocation? get selectedLocation => _selectedLocation;
   var _stateStreamController = StreamController<TileLocation?>.broadcast();
   Stream<TileLocation?> get stateStream => _stateStreamController.stream;
 
@@ -31,15 +31,15 @@ class ClickHandler {
   MoveTileAction? _handleMoveTileSelector(
       GameState state, TileLocation location, PlayerColor playerColor) {
     final colorAtLocation = state.gameBoard[location]?.color;
-    if (colorAtLocation == null && _source != null) {
+    if (colorAtLocation == null && _selectedLocation != null) {
       final action = MoveTileAction(
         playerColor: playerColor,
-        source: _source!,
+        source: _selectedLocation!,
         destination: location,
       );
       _setSource(null);
       return action;
-    } else if (location == _source) {
+    } else if (location == _selectedLocation) {
       _setSource(null);
     } else if (colorAtLocation == playerColor) {
       _setSource(location);
@@ -48,7 +48,7 @@ class ClickHandler {
   }
 
   void _setSource(TileLocation? newState) {
-    _source = newState;
+    _selectedLocation = newState;
     _stateStreamController.add(newState);
   }
 }
