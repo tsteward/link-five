@@ -64,21 +64,32 @@ class GameStatusWidget extends StatelessWidget {
           final player = players[i];
           var nameStyle = const TextStyle();
           var name = player.name;
+          var tileCounterText = 'Tiles: ';
           if (player.color == currentTurn) {
             nameStyle = const TextStyle(fontWeight: FontWeight.bold);
           }
           if (player.color == userColor) {
             name += ' (You)';
           }
-          name += ' Tiles: ';
-          name += remaingTilesMap[player.color].toString();
+          tileCounterText += remaingTilesMap[player.color].toString();
+          Row(
+            children: [
+              ColorBoxWidget(color: player.color),
+            ],
+          );
           return Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(
               children: [
                 ColorBoxWidget(color: player.color),
                 const SizedBox(width: 8.0),
-                OutlinedText(name, style: nameStyle),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    OutlinedText(name, style: nameStyle),
+                    OutlinedText(tileCounterText, style: const TextStyle()),
+                  ],
+                ),
               ],
             ),
           );
