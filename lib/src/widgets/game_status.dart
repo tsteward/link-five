@@ -82,7 +82,7 @@ class GameStatusWidget extends StatelessWidget {
             child: Row(
               children: [
                 ColorBoxWidget(color: player.color),
-                SizedBox(width: 8.0),
+                const SizedBox(width: 8.0),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
