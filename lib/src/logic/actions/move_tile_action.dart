@@ -5,8 +5,8 @@ import 'package:link_five/src/model/game/tile.dart';
 import 'package:link_five/src/model/game/tile_location.dart';
 
 class MoveTileAction extends GameAction {
-  TileLocation source;
-  TileLocation destination;
+  final TileLocation source;
+  final TileLocation destination;
 
   MoveTileAction({
     required super.playerColor,
