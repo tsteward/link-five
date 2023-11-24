@@ -10,7 +10,7 @@ import 'package:link_five/src/model/game/tile_location.dart';
 class ClickHandler {
   TileLocation? _selectedLocation;
   TileLocation? get selectedLocation => _selectedLocation;
-  var _stateStreamController = StreamController<TileLocation?>.broadcast();
+  final _stateStreamController = StreamController<TileLocation?>.broadcast();
   Stream<TileLocation?> get stateStream => _stateStreamController.stream;
 
   GameAction? handleGameClick(
