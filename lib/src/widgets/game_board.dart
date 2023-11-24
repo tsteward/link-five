@@ -28,12 +28,12 @@ class _GameBoardWidgetState extends State<GameBoardWidget> {
 
   @override
   Widget build(BuildContext context) {
-    PlayerColor? hoverColor;
+    PlayerColor? currentPlayerColor;
     TileLocation? hoverLocation;
     final isPlayerTurn = widget.playerColor == widget.gameState.currentPlayer;
     final hoverIsUnoccupied =
         widget.gameState.gameBoard[_hoverLocation] == null;
-    hoverColor = widget.playerColor;
+    currentPlayerColor = widget.playerColor;
     if (isPlayerTurn && hoverIsUnoccupied) {
       hoverLocation = _hoverLocation;
     }
@@ -53,7 +53,7 @@ class _GameBoardWidgetState extends State<GameBoardWidget> {
             gameState: widget.gameState,
             hoverLocation: hoverLocation,
             selectedLocation: widget.selectedLocation,
-            hoverColor: hoverColor,
+            currentPlayerColor: currentPlayerColor,
           ),
           child: Container(),
         ),
