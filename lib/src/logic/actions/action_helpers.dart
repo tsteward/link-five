@@ -99,7 +99,7 @@ class _Direction {
   const _Direction(this.x, this.y);
 }
 
-GameState rebuildGameState(GameState gameState, Tile tile) {
+GameState postMoveUpdate(GameState gameState, Tile tile) {
   final winningTiles = findWin(gameState, tile);
   if (winningTiles == null) {
     return gameState.rebuild(

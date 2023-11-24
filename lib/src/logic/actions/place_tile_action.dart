@@ -31,6 +31,6 @@ class PlaceTileAction extends GameAction {
     final tile = Tile(location: location, color: playerColor);
     gameState = gameState.placeTile(tile);
 
-    return rebuildGameState(gameState, tile);
+    return postMoveUpdate(gameState, tile);
   }
 }

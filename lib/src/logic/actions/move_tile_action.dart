@@ -41,6 +41,6 @@ class MoveTileAction extends GameAction {
     gameState = gameState.placeTile(tile);
     gameState = gameState.removeTile(source);
 
-    return rebuildGameState(gameState, tile);
+    return postMoveUpdate(gameState, tile);
   }
 }
