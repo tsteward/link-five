@@ -31,15 +31,6 @@ class PlaceTileAction extends GameAction {
     final tile = Tile(location: location, color: playerColor);
     gameState = gameState.placeTile(tile);
 
-    final winningTiles = findWin(gameState, tile);
-    if (winningTiles == null) {
-      return gameState.rebuild(
-        (b) => b..turnNumber = gameState.turnNumber + 1,
-      );
-    } else {
-      return gameState.rebuild(
-        (b) => b..winningTiles = winningTiles.toBuilder(),
-      );
-    }
+    return rebuildGameState(gameState, tile);
   }
 }

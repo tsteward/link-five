@@ -22,7 +22,7 @@ extension AdjacencyChecking on TileLocation {
 }
 
 bool hasNoOrphans(GameState gameState) {
-  Set<TileLocation> set = Set();
+  final set = <TileLocation>{};
   final first = gameState.gameBoard.entries.first;
   _hasNoOrphansRecursive(gameState, set, first.key);
   return set.length == gameState.gameBoard.length;
@@ -107,4 +107,17 @@ class _Direction {
   final int x;
   final int y;
   const _Direction(this.x, this.y);
+}
+
+GameState rebuildGameState(GameState gameState, Tile tile) {
+  final winningTiles = findWin(gameState, tile);
+  if (winningTiles == null) {
+    return gameState.rebuild(
+      (b) => b..turnNumber = gameState.turnNumber + 1,
+    );
+  } else {
+    return gameState.rebuild(
+      (b) => b..winningTiles = winningTiles.toBuilder(),
+    );
+  }
 }

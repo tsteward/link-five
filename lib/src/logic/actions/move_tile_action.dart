@@ -17,14 +17,13 @@ class MoveTileAction extends GameAction {
 
   @override
   bool isPermitted(GameState gameState) {
-    final isGameBoardEmpty = gameState.tiles.isEmpty;
     final isSourceTileCorrect = gameState.tile(source)?.color == playerColor;
     final isLocationEmpty = gameState.tile(destination) == null;
     final hasAdjacentTile = destination.hasAdjacentTile(gameState, source);
     final tilesAvailable = gameState.tilesAvailable;
 
     return isLocationEmpty &&
-        (hasAdjacentTile || isGameBoardEmpty) &&
+        hasAdjacentTile &&
         !gameState.hasWinner &&
         !tilesAvailable &&
         isSourceTileCorrect &&
@@ -42,15 +41,6 @@ class MoveTileAction extends GameAction {
     gameState = gameState.placeTile(tile);
     gameState = gameState.removeTile(source);
 
-    final winningTiles = findWin(gameState, tile);
-    if (winningTiles == null) {
-      return gameState.rebuild(
-        (b) => b..turnNumber = gameState.turnNumber + 1,
-      );
-    } else {
-      return gameState.rebuild(
-        (b) => b..winningTiles = winningTiles.toBuilder(),
-      );
-    }
+    return rebuildGameState(gameState, tile);
   }
 }
