@@ -23,16 +23,17 @@ class MoveTileAction extends GameAction {
     final hasAdjacentTile = destination.hasAdjacentTile(gameState, source);
     final tilesAvailable = gameState.tilesAvailable;
 
-    if (isLocationEmpty &&
+    return isLocationEmpty &&
         (hasAdjacentTile || isGameBoardEmpty) &&
         !gameState.hasWinner &&
         !tilesAvailable &&
-        isSourceTileCorrect) {
-      final potentialGameState = applyAction(gameState);
-      return hasNoOrphans(potentialGameState);
-    } else {
-      return false;
-    }
+        isSourceTileCorrect &&
+        _actionDoesNotOrphan(gameState);
+  }
+
+  bool _actionDoesNotOrphan(GameState gameState) {
+    final potentialGameState = applyAction(gameState);
+    return hasNoOrphans(potentialGameState);
   }
 
   @override
