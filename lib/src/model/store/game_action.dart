@@ -15,6 +15,7 @@ abstract class GameAction implements Built<GameAction, GameActionBuilder> {
   String get userId;
   GameActionType get type;
   PlaceTileAction? get placeTileAction;
+  MoveTileAction? get moveTileAction;
 
   GameAction._();
   factory GameAction([void Function(GameActionBuilder) updates]) = _$GameAction;
@@ -34,6 +35,7 @@ class GameActionType extends EnumClass {
       _$gameActionTypeSerializer;
 
   static const GameActionType placeTileAction = _$placeTileAction;
+  static const GameActionType moveTileAction = _$moveTileAction;
 
   const GameActionType._(super.name);
 
@@ -59,5 +61,27 @@ abstract class PlaceTileAction
   static PlaceTileAction? fromMap(Object object) =>
       serializers.deserializeWith(serializer, object);
   static PlaceTileAction? fromJson(String jsonString) =>
+      serializers.deserializeWith(serializer, jsonDecode(jsonString));
+}
+
+abstract class MoveTileAction
+    implements Built<MoveTileAction, MoveTileActionBuilder> {
+  static Serializer<MoveTileAction> get serializer =>
+      _$moveTileActionSerializer;
+
+  TileLocation get sourceLocation;
+  TileLocation get destinationLocation;
+
+  MoveTileAction._();
+  factory MoveTileAction([void Function(MoveTileActionBuilder) updates]) =
+      _$MoveTileAction;
+
+  Map<String, dynamic>? toMap() =>
+      serializers.serializeWith(serializer, this) as Map<String, dynamic>;
+  String toJson() => jsonEncode(serializers.serializeWith(serializer, this));
+
+  static MoveTileAction? fromMap(Object object) =>
+      serializers.deserializeWith(serializer, object);
+  static MoveTileAction? fromJson(String jsonString) =>
       serializers.deserializeWith(serializer, jsonDecode(jsonString));
 }

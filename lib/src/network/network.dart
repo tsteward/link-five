@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:link_five/firebase_options.dart';
+import 'package:link_five/src/logic/actions/move_tile_action.dart';
 import 'package:link_five/src/logic/actions/place_tile_action.dart';
 import 'package:link_five/src/logic/game_action.dart';
 import 'package:link_five/src/model/game/player_color.dart';
@@ -226,11 +227,18 @@ class Network {
   store_action.GameAction _toStoreGameAction(GameAction action) {
     late store_action.GameActionType type;
     store_action.PlaceTileActionBuilder? storePlaceTileAction;
+    store_action.MoveTileActionBuilder? storeMoveTileAction;
     switch (action) {
       case final PlaceTileAction placeTileAction:
         type = store_action.GameActionType.placeTileAction;
         storePlaceTileAction = store_action.PlaceTileActionBuilder()
           ..location = placeTileAction.location.toBuilder();
+        break;
+      case final MoveTileAction moveTileAction:
+        type = store_action.GameActionType.moveTileAction;
+        storeMoveTileAction = store_action.MoveTileActionBuilder()
+          ..sourceLocation = moveTileAction.source.toBuilder()
+          ..destinationLocation = moveTileAction.destination.toBuilder();
         break;
     }
 
@@ -239,7 +247,8 @@ class Network {
         ..basedOn = _currentActionId
         ..userId = state.userId
         ..type = type
-        ..placeTileAction = storePlaceTileAction,
+        ..placeTileAction = storePlaceTileAction
+        ..moveTileAction = storeMoveTileAction,
     );
   }
 
@@ -259,6 +268,14 @@ class Network {
           playerColor: color,
           location: storeAction.placeTileAction!.location,
         );
+        break;
+      case store_action.GameActionType.moveTileAction:
+        action = MoveTileAction(
+          playerColor: color,
+          source: storeAction.moveTileAction!.sourceLocation,
+          destination: storeAction.moveTileAction!.destinationLocation,
+        );
+        break;
     }
 
     return action;
