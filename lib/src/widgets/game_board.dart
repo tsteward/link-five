@@ -12,18 +12,18 @@ class GameBoardWidget extends StatefulWidget {
   final TileLocation? selectedLocation;
 
   const GameBoardWidget({
-    Key? key,
+    super.key,
     required this.gameState,
     required this.playerColor,
     required this.onClick,
     required this.selectedLocation,
-  }) : super(key: key);
+  });
 
   @override
-  _GameBoardWidgetState createState() => _GameBoardWidgetState();
+  GameBoardWidgetState createState() => GameBoardWidgetState();
 }
 
-class _GameBoardWidgetState extends State<GameBoardWidget> {
+class GameBoardWidgetState extends State<GameBoardWidget> {
   TileLocation? _hoverLocation;
 
   @override

@@ -22,7 +22,7 @@ class Network {
 
   var _state = NetworkState();
   NetworkState get state => _state;
-  var _stateStreamController = StreamController<NetworkState>.broadcast();
+  final _stateStreamController = StreamController<NetworkState>.broadcast();
   Stream<NetworkState> get stateStream => _stateStreamController.stream;
 
   Stream<Map<String, Player>>? _playersStream;
@@ -226,12 +226,11 @@ class Network {
   store_action.GameAction _toStoreGameAction(GameAction action) {
     late store_action.GameActionType type;
     store_action.PlaceTileActionBuilder? storePlaceTileAction;
-    switch (action.runtimeType) {
-      case PlaceTileAction:
-        final placeTileActiion = action as PlaceTileAction;
+    switch (action) {
+      case final PlaceTileAction placeTileAction:
         type = store_action.GameActionType.placeTileAction;
         storePlaceTileAction = store_action.PlaceTileActionBuilder()
-          ..location = placeTileActiion.location.toBuilder();
+          ..location = placeTileAction.location.toBuilder();
         break;
     }
 

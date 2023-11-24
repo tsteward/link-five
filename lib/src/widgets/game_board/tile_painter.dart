@@ -71,8 +71,8 @@ extension OffsetConversion on TileLocation {
   Offset toOffset(Size size) {
     final center = size.center(Offset.zero);
     return Offset(
-      center.dx + this.x * tileSize,
-      center.dy + this.y * tileSize,
+      center.dx + x * tileSize,
+      center.dy + y * tileSize,
     );
   }
 }
@@ -84,7 +84,7 @@ extension TileDrawer on Canvas {
     Color? strokeColor,
   }) {
     if (color != null) {
-      this.drawRect(
+      drawRect(
         Rect.fromCenter(
           center: center,
           width: tileSize,
@@ -95,7 +95,7 @@ extension TileDrawer on Canvas {
     }
 
     if (strokeColor != null) {
-      this.drawRect(
+      drawRect(
         Rect.fromCenter(
           center: center,
           width: tileSize,

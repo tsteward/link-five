@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 
 class GameSetupContainerWidget extends StatelessWidget {
-  GameSetupContainerWidget({Key? key, required this.children})
-      : super(key: key);
+  const GameSetupContainerWidget({super.key, required this.children});
 
   final List<Widget> children;
 
@@ -14,7 +13,7 @@ class GameSetupContainerWidget extends StatelessWidget {
         height: 500,
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.only(
+          borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(10),
               topRight: Radius.circular(10),
               bottomLeft: Radius.circular(10),
@@ -24,14 +23,14 @@ class GameSetupContainerWidget extends StatelessWidget {
               color: Colors.grey.withOpacity(0.5),
               spreadRadius: 5,
               blurRadius: 7,
-              offset: Offset(0, 3), // changes position of shadow
+              offset: const Offset(0, 3), // changes position of shadow
             ),
           ],
         ),
         child: ListView(
-          padding: EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(8.0),
           children: <Widget>[
-            Center(
+            const Center(
               child: Text(
                 'Link Five',
                 style: TextStyle(fontSize: 36),

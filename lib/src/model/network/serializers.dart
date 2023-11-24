@@ -9,7 +9,7 @@ import 'package:link_five/src/model/store/player.dart';
 
 part 'serializers.g.dart';
 
-@SerializersFor(const [
+@SerializersFor([
   GameAction,
   GameActionType,
   GameStart,

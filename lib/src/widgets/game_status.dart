@@ -6,15 +6,15 @@ import 'package:link_five/src/widgets/outlined_text.dart';
 import 'package:link_five/src/model/game/game_state.dart';
 
 class GameStatusWidget extends StatelessWidget {
-  GameStatusWidget({
-    Key? key,
+  const GameStatusWidget({
+    super.key,
     required this.players,
     required this.currentTurn,
     required this.userColor,
     required this.gameCode,
     required this.turnOrder,
     required this.turnNumber,
-  }) : super(key: key);
+  });
 
   final List<Player> players;
   final PlayerColor currentTurn;
@@ -45,13 +45,16 @@ class GameStatusWidget extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: Row(
             children: [
-              OutlinedText(
+              const OutlinedText(
                 'Game Code: ',
                 style: TextStyle(fontSize: 24.0),
               ),
               OutlinedText(
                 gameCode,
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24.0),
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 24.0,
+                ),
                 selectable: true,
               ),
             ],
@@ -59,10 +62,10 @@ class GameStatusWidget extends StatelessWidget {
         ),
         ...List.generate(players.length, (i) {
           final player = players[i];
-          var nameStyle = TextStyle();
+          var nameStyle = const TextStyle();
           var name = player.name;
           if (player.color == currentTurn) {
-            nameStyle = TextStyle(fontWeight: FontWeight.bold);
+            nameStyle = const TextStyle(fontWeight: FontWeight.bold);
           }
           if (player.color == userColor) {
             name += ' (You)';
@@ -74,7 +77,7 @@ class GameStatusWidget extends StatelessWidget {
             child: Row(
               children: [
                 ColorBoxWidget(color: player.color),
-                SizedBox(width: 8.0),
+                const SizedBox(width: 8.0),
                 OutlinedText(name, style: nameStyle),
               ],
             ),

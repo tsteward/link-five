@@ -6,13 +6,13 @@ import 'package:link_five/src/widgets/color_picker.dart';
 import 'package:link_five/src/widgets/game_setup_container.dart';
 
 class SetupPlayersWidget extends StatefulWidget {
-  SetupPlayersWidget({
-    Key? key,
+  const SetupPlayersWidget({
+    super.key,
     required this.onPlayerInfoChanged,
     required this.userId,
     required this.gameCode,
     required this.players,
-  }) : super(key: key);
+  });
 
   final Function(Player name) onPlayerInfoChanged;
   final String userId;
@@ -20,14 +20,15 @@ class SetupPlayersWidget extends StatefulWidget {
   final Map<String, Player> players;
 
   @override
-  _SetupPlayersWidgetState createState() => _SetupPlayersWidgetState();
+  SetupPlayersWidgetState createState() => SetupPlayersWidgetState();
 }
 
-class _SetupPlayersWidgetState extends State<SetupPlayersWidget> {
+class SetupPlayersWidgetState extends State<SetupPlayersWidget> {
   final _gameCodeController = TextEditingController();
 
   Player? get _player => widget.players[widget.userId];
 
+  @override
   void dispose() {
     super.dispose();
     _gameCodeController.dispose();
@@ -60,15 +61,15 @@ class _SetupPlayersWidgetState extends State<SetupPlayersWidget> {
       }
 
       var name = player.name;
-      var nameStyle = TextStyle();
+      var nameStyle = const TextStyle();
       if (isUser) {
         name += ' (You)';
-        nameStyle = TextStyle(fontWeight: FontWeight.bold);
+        nameStyle = const TextStyle(fontWeight: FontWeight.bold);
       }
 
       Widget? readyIcon;
       if (player.isReady) {
-        readyIcon = Icon(
+        readyIcon = const Icon(
           Icons.check_circle,
           color: Colors.green,
           size: 20,
@@ -77,11 +78,11 @@ class _SetupPlayersWidgetState extends State<SetupPlayersWidget> {
 
       playerRows.add(
         ListTile(
-          contentPadding: EdgeInsets.fromLTRB(8.0, 0.0, 8.0, 0.0),
+          contentPadding: const EdgeInsets.fromLTRB(8.0, 0.0, 8.0, 0.0),
           title: Wrap(
             children: [
               ColorBoxWidget(color: player.color),
-              SizedBox(width: 8.0),
+              const SizedBox(width: 8.0),
               Text(name, style: nameStyle),
             ],
           ),
@@ -93,15 +94,15 @@ class _SetupPlayersWidgetState extends State<SetupPlayersWidget> {
     return GameSetupContainerWidget(
       children: [
         ListTile(
-          contentPadding: EdgeInsets.fromLTRB(8.0, 0.0, 8.0, 0.0),
-          title: Text('Game Code'),
+          contentPadding: const EdgeInsets.fromLTRB(8.0, 0.0, 8.0, 0.0),
+          title: const Text('Game Code'),
           trailing: SelectableText(widget.gameCode),
         ),
         if (_player != null)
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: TextFormField(
-              decoration: InputDecoration(labelText: 'Name'),
+              decoration: const InputDecoration(labelText: 'Name'),
               enabled: !_player!.isReady,
               controller: _gameCodeController,
             ),
@@ -125,7 +126,7 @@ class _SetupPlayersWidgetState extends State<SetupPlayersWidget> {
                   : () => widget.onPlayerInfoChanged(
                         _player!.rebuild((b) => b..isReady = true),
                       ),
-              child: Text('Ready'),
+              child: const Text('Ready'),
             ),
           ),
       ],
