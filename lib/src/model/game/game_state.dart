@@ -32,7 +32,10 @@ abstract class GameState implements Built<GameState, GameStateBuilder> {
   Tile? tile(TileLocation location) => gameBoard[location];
 
   GameState placeTile(Tile tile) =>
-      this.rebuild((b) => b.gameBoard[tile.location] = tile);
+      rebuild((b) => b.gameBoard[tile.location] = tile);
+
+  GameState removeTile(TileLocation location) =>
+      rebuild((b) => b.gameBoard.remove(location));
 
   GameState._();
   factory GameState([BuiltList<PlayerColor>? turnOrder]) => _$GameState(

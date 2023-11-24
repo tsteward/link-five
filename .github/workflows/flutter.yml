@@ -11,16 +11,17 @@ on:
   pull_request:
     branches: [ main ]
 
+permissions:
+  pages: write
+  id-token: write
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-java@v1
-        with:
-          java-version: '12.x'
-      - uses: subosito/flutter-action@v1
+      - uses: actions/checkout@v4.1.1
+      - uses: subosito/flutter-action@v2.12.0
 
       - name: Install dependencies
         run: flutter pub get
@@ -35,11 +36,13 @@ jobs:
         run: flutter test
 
       - name: Build
-        run: flutter build web
+        run: flutter build web --base-href "/link-five/"
 
-      - name: Deploy
-        if: github.ref == 'refs/heads/main'
-        uses: JamesIves/github-pages-deploy-action@4.1.4
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v2.0.0
         with:
-          branch: gh-pages
-          folder: build/web
+          path: build/web
+      - name: Deploy to GitHub Pages
+        if: github.ref == 'refs/heads/main'
+        id: deployment
+        uses: actions/deploy-pages@v2.0.4

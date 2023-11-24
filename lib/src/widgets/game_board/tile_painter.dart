@@ -8,12 +8,14 @@ import 'package:link_five/src/widgets/game_board/constants.dart';
 class TilePainter extends CustomPainter {
   final GameState gameState;
   final TileLocation? hoverLocation;
-  final PlayerColor? hoverColor;
+  final TileLocation? selectedLocation;
+  final PlayerColor? currentPlayerColor;
 
   TilePainter({
     required this.gameState,
     required this.hoverLocation,
-    required this.hoverColor,
+    required this.selectedLocation,
+    required this.currentPlayerColor,
   });
 
   @override
@@ -37,12 +39,22 @@ class TilePainter extends CustomPainter {
       }
     }
 
-    if (hoverLocation != null && hoverColor != null) {
+    if (hoverLocation != null &&
+        currentPlayerColor != null &&
+        selectedLocation != hoverLocation) {
       final tileCenter = hoverLocation!.toOffset(size);
       canvas.drawTile(
           center: tileCenter,
-          color: playerColorToFlutterColor[hoverColor]!.shade100,
+          color: playerColorToFlutterColor[currentPlayerColor]!.shade100,
           strokeColor: Colors.grey);
+    }
+
+    if (selectedLocation != null && currentPlayerColor != null) {
+      final tileCenter = selectedLocation!.toOffset(size);
+      canvas.drawTile(
+          center: tileCenter,
+          color: playerColorToFlutterColor[currentPlayerColor]!.shade100,
+          strokeColor: Colors.blue);
     }
   }
 
@@ -50,7 +62,8 @@ class TilePainter extends CustomPainter {
   bool shouldRepaint(TilePainter oldDelegate) {
     return oldDelegate.gameState != gameState ||
         oldDelegate.hoverLocation != hoverLocation ||
-        oldDelegate.hoverColor != hoverColor;
+        oldDelegate.currentPlayerColor != currentPlayerColor ||
+        oldDelegate.selectedLocation != selectedLocation;
   }
 }
 
@@ -58,8 +71,8 @@ extension OffsetConversion on TileLocation {
   Offset toOffset(Size size) {
     final center = size.center(Offset.zero);
     return Offset(
-      center.dx + this.x * tileSize,
-      center.dy + this.y * tileSize,
+      center.dx + x * tileSize,
+      center.dy + y * tileSize,
     );
   }
 }
@@ -71,7 +84,7 @@ extension TileDrawer on Canvas {
     Color? strokeColor,
   }) {
     if (color != null) {
-      this.drawRect(
+      drawRect(
         Rect.fromCenter(
           center: center,
           width: tileSize,
@@ -82,7 +95,7 @@ extension TileDrawer on Canvas {
     }
 
     if (strokeColor != null) {
-      this.drawRect(
+      drawRect(
         Rect.fromCenter(
           center: center,
           width: tileSize,

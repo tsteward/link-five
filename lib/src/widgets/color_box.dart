@@ -3,13 +3,13 @@ import 'package:link_five/src/model/game/player_color.dart';
 import 'package:link_five/src/widgets/constants.dart';
 
 class ColorBoxWidget extends StatelessWidget {
-  ColorBoxWidget({
-    Key? key,
+  const ColorBoxWidget({
+    super.key,
     required this.color,
     this.hasCheckMark = false,
     this.onTap,
     this.enabled = true,
-  }) : super(key: key);
+  });
 
   final PlayerColor color;
   final bool hasCheckMark;

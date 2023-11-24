@@ -9,30 +9,32 @@ class GameBoardWidget extends StatefulWidget {
   final GameState gameState;
   final PlayerColor playerColor;
   final Function(TileLocation location) onClick;
+  final TileLocation? selectedLocation;
 
   const GameBoardWidget({
-    Key? key,
+    super.key,
     required this.gameState,
     required this.playerColor,
     required this.onClick,
-  }) : super(key: key);
+    required this.selectedLocation,
+  });
 
   @override
-  _GameBoardWidgetState createState() => _GameBoardWidgetState();
+  GameBoardWidgetState createState() => GameBoardWidgetState();
 }
 
-class _GameBoardWidgetState extends State<GameBoardWidget> {
+class GameBoardWidgetState extends State<GameBoardWidget> {
   TileLocation? _hoverLocation;
 
   @override
   Widget build(BuildContext context) {
-    PlayerColor? hoverColor;
+    PlayerColor? currentPlayerColor;
     TileLocation? hoverLocation;
     final isPlayerTurn = widget.playerColor == widget.gameState.currentPlayer;
     final hoverIsUnoccupied =
         widget.gameState.gameBoard[_hoverLocation] == null;
+    currentPlayerColor = widget.playerColor;
     if (isPlayerTurn && hoverIsUnoccupied) {
-      hoverColor = widget.playerColor;
       hoverLocation = _hoverLocation;
     }
 
@@ -50,7 +52,8 @@ class _GameBoardWidgetState extends State<GameBoardWidget> {
           painter: TilePainter(
             gameState: widget.gameState,
             hoverLocation: hoverLocation,
-            hoverColor: hoverColor,
+            selectedLocation: widget.selectedLocation,
+            currentPlayerColor: currentPlayerColor,
           ),
           child: Container(),
         ),

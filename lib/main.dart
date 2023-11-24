@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:link_five/src/logic/interaction/click_handler.dart';
+import 'package:link_five/src/logic/game_action.dart';
 import 'package:link_five/src/model/game/game_state.dart';
 import 'package:link_five/src/model/game/tile_location.dart';
 import 'package:link_five/src/network/network.dart';
-import 'package:link_five/src/logic/actions/place_tile_action.dart';
 import 'package:link_five/src/logic/game.dart';
 import 'package:link_five/src/model/game/player_color.dart';
 import 'package:link_five/src/model/network/network_state.dart';
@@ -14,10 +15,12 @@ import 'package:link_five/src/widgets/loading.dart';
 import 'package:link_five/src/widgets/setup_players.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -26,25 +29,27 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.green,
       ),
-      home: Home(),
+      home: const Home(),
     );
   }
 }
 
 class Home extends StatefulWidget {
-  Home({Key? key}) : super(key: key);
+  const Home({super.key});
 
   @override
-  _HomeState createState() => _HomeState();
+  HomeState createState() => HomeState();
 }
 
-class _HomeState extends State<Home> {
+class HomeState extends State<Home> {
   final Network _network = Network();
   final _preGame = Game(turnOrder: PlayerColor.values.toList());
+  final ClickHandler _clickHandler = ClickHandler();
   Game? _game;
 
   GameState _preGameState = GameState();
   GameState? _gameState;
+  TileLocation? _selectedLocation;
   NetworkState _networkState = NetworkState();
   Future<void>? _initialization;
 
@@ -55,6 +60,7 @@ class _HomeState extends State<Home> {
     setState(() {
       _preGameState = _preGame.state;
       _networkState = _network.state;
+      _selectedLocation = _clickHandler.selectedLocation;
       _initialization = initialize();
     });
 
@@ -63,6 +69,9 @@ class _HomeState extends State<Home> {
     );
     _network.stateStream.listen(
       (networkState) => setState(() => _networkState = networkState),
+    );
+    _clickHandler.stateStream.listen(
+      (source) => setState(() => _selectedLocation = source),
     );
     _network.stateStream
         .firstWhere((state) => state.hasGameStarted)
@@ -94,7 +103,7 @@ class _HomeState extends State<Home> {
           builder: (context, snapshot) {
             Widget? setupWidget;
             if (snapshot.connectionState != ConnectionState.done) {
-              setupWidget = LoadingWidget();
+              setupWidget = const LoadingWidget();
             } else if (_networkState.gameCode == null) {
               setupWidget = _setupGameCode(context);
             } else if (_networkState.players != null &&
@@ -103,7 +112,7 @@ class _HomeState extends State<Home> {
             } else if (_networkState.hasGameStarted) {
               setupWidget = null;
             } else {
-              setupWidget = LoadingWidget();
+              setupWidget = const LoadingWidget();
             }
 
             if (snapshot.connectionState == ConnectionState.done) {
@@ -119,7 +128,7 @@ class _HomeState extends State<Home> {
                 ],
               );
             }
-            return LoadingWidget();
+            return const LoadingWidget();
           }),
     );
   }
@@ -136,10 +145,11 @@ class _HomeState extends State<Home> {
       gameState: _gameState ?? _preGameState,
       onClick: _handleGameClick,
       playerColor: color,
+      selectedLocation: _selectedLocation,
     );
   }
 
-  Widget _gameGrid(BuildContext context) => GameGridWidget();
+  Widget _gameGrid(BuildContext context) => const GameGridWidget();
 
   Widget _setupGameCode(BuildContext context) => SetupGameCodeWidget(
         onJoinGameClicked: (String gameCode) => _network.joinGame(gameCode),
@@ -163,22 +173,21 @@ class _HomeState extends State<Home> {
       );
 
   void _handleGameClick(TileLocation location) {
+    GameAction? action;
     if (_game == null) {
-      _preGame.applyAction(
-        PlaceTileAction(
-          playerColor: _preGameState.currentPlayer,
-          location: location,
-        ),
-      );
+      action = _clickHandler.handleGameClick(
+          _preGame.state, location, _preGameState.currentPlayer);
     } else {
-      final action = PlaceTileAction(
-        playerColor: _networkState.playerColor!,
-        location: location,
-      );
-
-      if (_game!.isPermitted(action)) {
-        _network.sendAction(action);
-      }
+      action = _clickHandler.handleGameClick(
+          _game!.state, location, _gameState!.currentPlayer);
+    }
+    if (action == null) {
+      return;
+    }
+    if (_game == null) {
+      _preGame.applyAction(action);
+    } else if (_game!.isPermitted(action)) {
+      _network.sendAction(action);
     }
   }
 }

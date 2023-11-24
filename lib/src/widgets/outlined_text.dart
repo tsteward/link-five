@@ -5,12 +5,12 @@ class OutlinedText extends StatelessWidget {
   final TextStyle style;
   final bool selectable;
 
-  OutlinedText(
+  const OutlinedText(
     this.data, {
-    Key? key,
+    super.key,
     required this.style,
     this.selectable = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
