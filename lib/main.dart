@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:link_five/src/model/clicker/click_handler.dart';
+import 'package:link_five/src/logic/interaction/click_handler.dart';
 import 'package:link_five/src/logic/game_action.dart';
 import 'package:link_five/src/model/game/game_state.dart';
 import 'package:link_five/src/model/game/tile_location.dart';
