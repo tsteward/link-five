@@ -51,7 +51,10 @@ class GameStatusWidget extends StatelessWidget {
               ),
               OutlinedText(
                 gameCode,
-                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24.0),
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 24.0,
+                ),
                 selectable: true,
               ),
             ],
