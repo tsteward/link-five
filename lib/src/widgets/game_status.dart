@@ -87,7 +87,7 @@ class GameStatusWidget extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     OutlinedText(name, style: nameStyle),
-                    OutlinedText(tileCounterText, style: TextStyle()),
+                    OutlinedText(tileCounterText, style: const TextStyle()),
                   ],
                 ),
               ],
