@@ -12,7 +12,7 @@ class PlayerColor extends EnumClass {
   static const PlayerColor pink = _$pink;
   static const PlayerColor yellow = _$yellow;
 
-  const PlayerColor._(String name) : super(name);
+  const PlayerColor._(super.name);
 
   static BuiltSet<PlayerColor> get values => _$stValues;
   static PlayerColor valueOf(String name) => _$stValueOf(name);

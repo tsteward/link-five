@@ -6,15 +6,15 @@ import 'package:link_five/src/widgets/outlined_text.dart';
 import 'package:link_five/src/model/game/game_state.dart';
 
 class GameStatusWidget extends StatelessWidget {
-  GameStatusWidget({
-    Key? key,
+  const GameStatusWidget({
+    super.key,
     required this.players,
     required this.currentTurn,
     required this.userColor,
     required this.gameCode,
     required this.turnOrder,
     required this.turnNumber,
-  }) : super(key: key);
+  });
 
   final List<Player> players;
   final PlayerColor currentTurn;
@@ -45,13 +45,16 @@ class GameStatusWidget extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: Row(
             children: [
-              OutlinedText(
+              const OutlinedText(
                 'Game Code: ',
                 style: TextStyle(fontSize: 24.0),
               ),
               OutlinedText(
                 gameCode,
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24.0),
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 24.0,
+                ),
                 selectable: true,
               ),
             ],
@@ -59,23 +62,34 @@ class GameStatusWidget extends StatelessWidget {
         ),
         ...List.generate(players.length, (i) {
           final player = players[i];
-          var nameStyle = TextStyle();
+          var nameStyle = const TextStyle();
           var name = player.name;
+          var tileCounterText = 'Tiles: ';
           if (player.color == currentTurn) {
-            nameStyle = TextStyle(fontWeight: FontWeight.bold);
+            nameStyle = const TextStyle(fontWeight: FontWeight.bold);
           }
           if (player.color == userColor) {
             name += ' (You)';
           }
-          name += ' Tiles: ';
-          name += remaingTilesMap[player.color].toString();
+          tileCounterText += remaingTilesMap[player.color].toString();
+          Row(
+            children: [
+              ColorBoxWidget(color: player.color),
+            ],
+          );
           return Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(
               children: [
                 ColorBoxWidget(color: player.color),
-                SizedBox(width: 8.0),
-                OutlinedText(name, style: nameStyle),
+                const SizedBox(width: 8.0),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    OutlinedText(name, style: nameStyle),
+                    OutlinedText(tileCounterText, style: const TextStyle()),
+                  ],
+                ),
               ],
             ),
           );

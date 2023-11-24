@@ -15,10 +15,12 @@ import 'package:link_five/src/widgets/loading.dart';
 import 'package:link_five/src/widgets/setup_players.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -27,19 +29,19 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.green,
       ),
-      home: Home(),
+      home: const Home(),
     );
   }
 }
 
 class Home extends StatefulWidget {
-  Home({Key? key}) : super(key: key);
+  const Home({super.key});
 
   @override
-  _HomeState createState() => _HomeState();
+  HomeState createState() => HomeState();
 }
 
-class _HomeState extends State<Home> {
+class HomeState extends State<Home> {
   final Network _network = Network();
   final _preGame = Game(turnOrder: PlayerColor.values.toList());
   final ClickHandler _clickHandler = ClickHandler();
@@ -101,7 +103,7 @@ class _HomeState extends State<Home> {
           builder: (context, snapshot) {
             Widget? setupWidget;
             if (snapshot.connectionState != ConnectionState.done) {
-              setupWidget = LoadingWidget();
+              setupWidget = const LoadingWidget();
             } else if (_networkState.gameCode == null) {
               setupWidget = _setupGameCode(context);
             } else if (_networkState.players != null &&
@@ -110,7 +112,7 @@ class _HomeState extends State<Home> {
             } else if (_networkState.hasGameStarted) {
               setupWidget = null;
             } else {
-              setupWidget = LoadingWidget();
+              setupWidget = const LoadingWidget();
             }
 
             if (snapshot.connectionState == ConnectionState.done) {
@@ -126,7 +128,7 @@ class _HomeState extends State<Home> {
                 ],
               );
             }
-            return LoadingWidget();
+            return const LoadingWidget();
           }),
     );
   }
@@ -147,7 +149,7 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Widget _gameGrid(BuildContext context) => GameGridWidget();
+  Widget _gameGrid(BuildContext context) => const GameGridWidget();
 
   Widget _setupGameCode(BuildContext context) => SetupGameCodeWidget(
         onJoinGameClicked: (String gameCode) => _network.joinGame(gameCode),

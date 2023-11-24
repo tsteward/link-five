@@ -1,7 +1,6 @@
 import 'package:link_five/src/logic/actions/action_helpers.dart';
 import 'package:link_five/src/logic/game_action.dart';
 import 'package:link_five/src/model/game/game_state.dart';
-import 'package:link_five/src/model/game/player_color.dart';
 import 'package:link_five/src/model/game/tile.dart';
 import 'package:link_five/src/model/game/tile_location.dart';
 
@@ -12,12 +11,11 @@ class MoveTileAction extends GameAction {
   TileLocation get destination => _destination;
 
   MoveTileAction({
-    required PlayerColor playerColor,
+    required super.playerColor,
     required TileLocation source,
     required TileLocation destination,
   })  : _destination = destination,
-        _source = source,
-        super(playerColor: playerColor);
+        _source = source;
 
   @override
   bool isPermitted(GameState gameState) {
