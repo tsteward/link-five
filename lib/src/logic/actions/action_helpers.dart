@@ -5,14 +5,45 @@ import 'package:link_five/src/model/game/tile_location.dart';
 
 extension AdjacencyChecking on TileLocation {
   bool hasAdjacentTile(GameState gameState, [TileLocation? location]) =>
-      isOccupied(gameState, location, _Direction(1, 0)) ||
-      isOccupied(gameState, location, _Direction(-1, 0)) ||
-      isOccupied(gameState, location, _Direction(0, 1)) ||
-      isOccupied(gameState, location, _Direction(0, -1));
+      _isOccupied(gameState, location, _Direction(1, 0)) ||
+      _isOccupied(gameState, location, _Direction(-1, 0)) ||
+      _isOccupied(gameState, location, _Direction(0, 1)) ||
+      _isOccupied(gameState, location, _Direction(0, -1));
 
-  bool isOccupied(GameState gameState, TileLocation? location, _Direction dir) {
-    return _getRelativeTile(gameState, this, dir, 1) != null &&
-        _getRelativeTile(gameState, this, dir, 1)?.location != location;
+  bool _isOccupied(
+      GameState gameState, TileLocation? location, _Direction dir) {
+    if (location == null) {
+      return _getRelativeTile(gameState, this, dir, 1) != null;
+    } else {
+      return _getRelativeTile(gameState, this, dir, 1) != null &&
+          _getRelativeLocation(location, dir, 1) != location;
+    }
+  }
+}
+
+bool hasNoOrphans(GameState gameState) {
+  Set<TileLocation> set = Set();
+  final first = gameState.gameBoard.entries.first;
+  _hasNoOrphansRecursive(gameState, set, first.key);
+  return set.length == gameState.gameBoard.length;
+}
+
+void _hasNoOrphansRecursive(
+    GameState gameState, Set<TileLocation> set, TileLocation location) {
+  if (!set.contains(location)) {
+    set.add(location);
+    _checkDirection(gameState, location, _Direction(1, 0), set);
+    _checkDirection(gameState, location, _Direction(-1, 0), set);
+    _checkDirection(gameState, location, _Direction(0, 1), set);
+    _checkDirection(gameState, location, _Direction(0, -1), set);
+  }
+}
+
+void _checkDirection(GameState gameState, TileLocation location, _Direction dir,
+    Set<TileLocation> set) {
+  if (_getRelativeTile(gameState, location, dir, 1) != null) {
+    _hasNoOrphansRecursive(
+        gameState, set, _getRelativeLocation(location, dir, 1));
   }
 }
 
@@ -59,10 +90,17 @@ BuiltSet<Tile>? findWin(GameState gameState, Tile startingTile) {
 
 Tile? _getRelativeTile(GameState gameState, TileLocation location,
     _Direction direction, int distance) {
+  final tileLocation = _getRelativeLocation(location, direction, distance);
+  final tile = gameState.tile(tileLocation);
+  return tile;
+}
+
+TileLocation _getRelativeLocation(
+    TileLocation location, _Direction direction, int distance) {
   final tileX = location.x + direction.x * distance;
   final tileY = location.y + direction.y * distance;
-  final tile = gameState.tile(TileLocation(tileX, tileY));
-  return tile;
+  final tileLocation = TileLocation(tileX, tileY);
+  return tileLocation;
 }
 
 class _Direction {
