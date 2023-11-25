@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:link_five/src/logic/actions/move_tile_action.dart';
+import 'package:link_five/src/logic/actions/place_tile_action.dart';
 import 'package:link_five/src/model/game/game_state.dart';
 import 'package:link_five/src/model/game/player_color.dart';
 import 'package:link_five/src/model/game/tile_location.dart';
@@ -30,14 +32,14 @@ class GameBoardWidgetState extends State<GameBoardWidget> {
   Widget build(BuildContext context) {
     PlayerColor? currentPlayerColor;
     TileLocation? hoverLocation;
+
     final isPlayerTurn = widget.playerColor == widget.gameState.currentPlayer;
-    final hoverIsUnoccupied =
-        widget.gameState.gameBoard[_hoverLocation] == null;
-    currentPlayerColor = widget.playerColor;
-    if (isPlayerTurn && hoverIsUnoccupied) {
+    if (isPlayerTurn &&
+        _hoverLocation != null &&
+        _checkValidSelection(_hoverLocation!)) {
       hoverLocation = _hoverLocation;
     }
-
+    currentPlayerColor = widget.playerColor;
     return MouseRegion(
       onHover: (event) => setState(
           () => _hoverLocation = event.localPosition.toTileLocation(context)),
@@ -59,6 +61,24 @@ class GameBoardWidgetState extends State<GameBoardWidget> {
         ),
       ),
     );
+  }
+
+  bool _checkValidSelection(TileLocation hoverLocation) {
+    if (widget.gameState.tilesAvailable) {
+      return PlaceTileAction(
+        playerColor: widget.playerColor,
+        location: hoverLocation,
+      ).isPermitted(widget.gameState);
+    } else if (widget.selectedLocation == null) {
+      return widget.gameState.gameBoard[hoverLocation]?.color ==
+          widget.playerColor;
+    } else {
+      return MoveTileAction(
+              playerColor: widget.playerColor,
+              source: widget.selectedLocation!,
+              destination: hoverLocation)
+          .isPermitted(widget.gameState);
+    }
   }
 }
 
