@@ -23,7 +23,7 @@ if (flutterVersionName == null) {
 }
 
 android {
-    namespace "com.example.link_five"
+    namespace "me.timothysteward.link_five"
     compileSdkVersion flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
 
@@ -42,7 +42,7 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "com.example.link_five"
+        applicationId "me.timothysteward.link_five"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
         minSdkVersion flutter.minSdkVersion
@@ -51,11 +51,24 @@ android {
         versionName flutterVersionName
     }
 
+    signingConfigs {
+        release {
+            storeFile file(System.getenv()["CM_KEYSTORE_PATH"])
+            storePassword System.getenv()["CM_KEYSTORE_PASSWORD"]
+            keyAlias System.getenv()["CM_KEY_ALIAS"]
+            keyPassword System.getenv()["CM_KEY_PASSWORD"]
+        }
+      }
+
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
             // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig signingConfigs.debug
+            if (System.getenv()["CI"]) { // CI=true is exported by Codemagic
+                signingConfig signingConfigs.release
+            } else {
+                // Signing with the debug keys for now, so `flutter run --release` works.
+                signingConfig signingConfigs.debug
+            }
         }
     }
 }

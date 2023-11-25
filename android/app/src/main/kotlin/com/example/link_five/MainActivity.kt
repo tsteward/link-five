@@ -1,4 +1,4 @@
-package com.example.link_five
+package me.timothysteward.link_five
 
 import io.flutter.embedding.android.FlutterActivity
 
