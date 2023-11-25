@@ -25,11 +25,10 @@ class GameStatusWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    
     final remaingTilesMap = <PlayerColor, int>{};
     final roundsPlayed = turnNumber ~/ turnOrder.length;
 
-    if ( turnNumber > turnOrder.length * GameState.tilesAvailablePerPlayer ) {
+    if (turnNumber > turnOrder.length * GameState.tilesAvailablePerPlayer) {
       for (var i = 0; i < turnOrder.length; i++) {
         final playerColor = turnOrder[i];
         remaingTilesMap[playerColor] = 0;
@@ -37,7 +36,8 @@ class GameStatusWidget extends StatelessWidget {
     } else {
       for (var i = 0; i < turnOrder.length; i++) {
         final playerColor = turnOrder[i];
-        remaingTilesMap[playerColor] = GameState.tilesAvailablePerPlayer - roundsPlayed;
+        remaingTilesMap[playerColor] =
+            GameState.tilesAvailablePerPlayer - roundsPlayed;
       }
       final turnsPlayedThisRound = turnNumber % turnOrder.length;
       for (var i = 0; i < turnsPlayedThisRound; i++) {
