@@ -70,6 +70,6 @@ class DefaultFirebaseOptions {
     messagingSenderId: '245508935109',
     projectId: 'link-five-45afa',
     storageBucket: 'link-five-45afa.appspot.com',
-    iosBundleId: 'com.example.linkFive',
+    iosBundleId: 'me.timothysteward.linkFive',
   );
 }
