@@ -3,7 +3,7 @@ description: A game. First to get five in a row wins!
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 1.0.0+1
+version: 1.0.1
 
 environment:
   sdk: ^3.2.0
