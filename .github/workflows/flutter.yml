@@ -39,7 +39,7 @@ jobs:
         run: flutter build web --base-href "/link-five/"
 
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v2.0.0
+        uses: actions/upload-pages-artifact@v3.0.0
         with:
           path: build/web
       - name: Deploy to GitHub Pages
