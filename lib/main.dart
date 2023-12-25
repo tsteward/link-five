@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:link_five/src/logic/actions/place_tile_action.dart';
 import 'package:link_five/src/logic/interaction/click_handler.dart';
 import 'package:link_five/src/logic/game_action.dart';
 import 'package:link_five/src/model/game/game_state.dart';
@@ -80,6 +81,7 @@ class HomeState extends State<Home> {
 
   _startGame() {
     _game = Game(turnOrder: _networkState.turnOrderByColor?.toList() ?? []);
+    _game?.applyAction(PlaceTileAction(playerColor: _networkState.turnOrderByColor!.first, location: TileLocation(0, 0)));
 
     setState(() {
       _gameState = _game!.state;
