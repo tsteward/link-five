@@ -148,6 +148,7 @@ class HomeState extends State<Home> {
       onClick: _handleGameClick,
       playerColor: color,
       selectedLocation: _selectedLocation,
+      isScalable: _game != null,
     );
   }
 

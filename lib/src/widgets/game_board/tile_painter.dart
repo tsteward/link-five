@@ -10,18 +10,20 @@ class TilePainter extends CustomPainter {
   final TileLocation? hoverLocation;
   final TileLocation? selectedLocation;
   final PlayerColor? currentPlayerColor;
+  final bool isScalable;
 
   TilePainter({
     required this.gameState,
     required this.hoverLocation,
     required this.selectedLocation,
     required this.currentPlayerColor,
+    required this.isScalable,
   });
 
   @override
   void paint(Canvas canvas, Size size) {
     for (final tile in gameState.tiles) {
-      final tileCenter = tile.location.toOffset(size);
+      final tileCenter = tile.location.toOffset(size, isScalable, gameState);
       canvas.drawTile(
         center: tileCenter,
         color: playerColorToFlutterColor[tile.color]!,
@@ -31,7 +33,7 @@ class TilePainter extends CustomPainter {
 
     if (gameState.winningTiles != null) {
       for (final tile in gameState.winningTiles!) {
-        final tileCenter = tile.location.toOffset(size);
+        final tileCenter = tile.location.toOffset(size, isScalable, gameState);
         canvas.drawTile(
           center: tileCenter,
           strokeColor: Colors.red,
@@ -42,7 +44,7 @@ class TilePainter extends CustomPainter {
     if (hoverLocation != null &&
         currentPlayerColor != null &&
         selectedLocation != hoverLocation) {
-      final tileCenter = hoverLocation!.toOffset(size);
+      final tileCenter = hoverLocation!.toOffset(size, isScalable, gameState);
       canvas.drawTile(
           center: tileCenter,
           color: playerColorToFlutterColor[currentPlayerColor]!.shade100,
@@ -50,7 +52,7 @@ class TilePainter extends CustomPainter {
     }
 
     if (selectedLocation != null && currentPlayerColor != null) {
-      final tileCenter = selectedLocation!.toOffset(size);
+      final tileCenter = selectedLocation!.toOffset(size, isScalable, gameState);
       canvas.drawTile(
           center: tileCenter,
           color: playerColorToFlutterColor[currentPlayerColor]!.shade100,
@@ -68,12 +70,19 @@ class TilePainter extends CustomPainter {
 }
 
 extension OffsetConversion on TileLocation {
-  Offset toOffset(Size size) {
+  Offset toOffset(Size size, bool isScalable, GameState gameState) {
     final center = size.center(Offset.zero);
-    return Offset(
-      center.dx + x * tileSize,
-      center.dy + y * tileSize,
-    );
+    if (isScalable) {
+      return Offset(
+        center.dx + (x - gameState.xCenter) * tileSize,
+        center.dy + (y - gameState.yCenter) * tileSize,
+        );
+    } else {
+      return Offset(
+        center.dx + x * tileSize,
+        center.dy + y * tileSize,
+      );
+    }
   }
 }
 

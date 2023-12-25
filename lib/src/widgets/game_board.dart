@@ -12,6 +12,7 @@ class GameBoardWidget extends StatefulWidget {
   final PlayerColor playerColor;
   final Function(TileLocation location) onClick;
   final TileLocation? selectedLocation;
+  final bool isScalable;
 
   const GameBoardWidget({
     super.key,
@@ -19,6 +20,7 @@ class GameBoardWidget extends StatefulWidget {
     required this.playerColor,
     required this.onClick,
     required this.selectedLocation,
+    required this.isScalable,
   });
 
   @override
@@ -56,6 +58,7 @@ class GameBoardWidgetState extends State<GameBoardWidget> {
             hoverLocation: hoverLocation,
             selectedLocation: widget.selectedLocation,
             currentPlayerColor: currentPlayerColor,
+            isScalable: widget.isScalable,
           ),
           child: Container(),
         ),
