@@ -81,7 +81,9 @@ class HomeState extends State<Home> {
 
   _startGame() {
     _game = Game(turnOrder: _networkState.turnOrderByColor?.toList() ?? []);
-    _game?.applyAction(PlaceTileAction(playerColor: _networkState.turnOrderByColor!.first, location: TileLocation(0, 0)));
+    _game?.applyAction(PlaceTileAction(
+        playerColor: _networkState.turnOrderByColor!.first,
+        location: TileLocation(0, 0)));
 
     setState(() {
       _gameState = _game!.state;
@@ -121,7 +123,7 @@ class HomeState extends State<Home> {
               return Stack(
                 fit: StackFit.expand,
                 children: [
-                  if(_game == null) _gameGrid(context),
+                  if (_game == null) _gameGrid(context),
                   _gameBoard(context),
                   if (setupWidget != null) setupWidget,
                   if (_networkState.players != null &&

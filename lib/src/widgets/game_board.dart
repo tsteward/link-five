@@ -45,14 +45,15 @@ class GameBoardWidgetState extends State<GameBoardWidget> {
     }
     currentPlayerColor = widget.playerColor;
     return MouseRegion(
-      onHover: (event) => setState(
-          () => _hoverLocation = event.localPosition.toTileLocation(context, widget.isScalable, widget.gameState)),
+      onHover: (event) => setState(() => _hoverLocation = event.localPosition
+          .toTileLocation(context, widget.isScalable, widget.gameState)),
       onExit: (_) => setState(() => _hoverLocation = null),
       cursor:
           hoverLocation == null ? MouseCursor.defer : SystemMouseCursors.click,
       child: GestureDetector(
         onTapDown: (details) {
-          widget.onClick(details.localPosition.toTileLocation(context, widget.isScalable, widget.gameState));
+          widget.onClick(details.localPosition
+              .toTileLocation(context, widget.isScalable, widget.gameState));
         },
         child: CustomPaint(
           painter: TilePainter(

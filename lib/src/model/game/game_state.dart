@@ -77,7 +77,7 @@ abstract class GameState implements Built<GameState, GameStateBuilder> {
   double get xCenter {
     return (xMax + xMin) / 2.0;
   }
-  
+
   @memoized
   double get yCenter {
     return (yMax + yMin) / 2.0;

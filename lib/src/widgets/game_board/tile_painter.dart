@@ -55,22 +55,22 @@ class TilePainter extends CustomPainter {
         selectedLocation != hoverLocation) {
       final tileCenter = hoverLocation!.toOffset(size, isScalable, gameState);
       canvas.drawTile(
-          center: tileCenter,
-          color: playerColorToFlutterColor[currentPlayerColor]!.shade100,
-          strokeColor: Colors.grey,
-          tileSize: scaledSize,
-          );
+        center: tileCenter,
+        color: playerColorToFlutterColor[currentPlayerColor]!.shade100,
+        strokeColor: Colors.grey,
+        tileSize: scaledSize,
+      );
     }
 
     if (selectedLocation != null && currentPlayerColor != null) {
       final tileCenter =
           selectedLocation!.toOffset(size, isScalable, gameState);
       canvas.drawTile(
-          center: tileCenter,
-          color: playerColorToFlutterColor[currentPlayerColor]!.shade100,
-          strokeColor: Colors.blue,
-          tileSize: scaledSize,
-          );
+        center: tileCenter,
+        color: playerColorToFlutterColor[currentPlayerColor]!.shade100,
+        strokeColor: Colors.blue,
+        tileSize: scaledSize,
+      );
     }
   }
 
