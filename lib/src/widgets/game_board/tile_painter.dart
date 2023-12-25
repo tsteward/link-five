@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:link_five/src/model/game/game_state.dart';
 import 'package:link_five/src/model/game/player_color.dart';
@@ -22,12 +24,18 @@ class TilePainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
+    double scaledSize = tileSize;
+    if (isScalable) {
+      scaledSize = min(size.width / (gameState.xRange + margin),
+          size.height / (gameState.yRange + margin));
+    }
     for (final tile in gameState.tiles) {
       final tileCenter = tile.location.toOffset(size, isScalable, gameState);
       canvas.drawTile(
         center: tileCenter,
         color: playerColorToFlutterColor[tile.color]!,
         strokeColor: Colors.black,
+        tileSize: scaledSize,
       );
     }
 
@@ -37,6 +45,7 @@ class TilePainter extends CustomPainter {
         canvas.drawTile(
           center: tileCenter,
           strokeColor: Colors.red,
+          tileSize: scaledSize,
         );
       }
     }
@@ -48,15 +57,20 @@ class TilePainter extends CustomPainter {
       canvas.drawTile(
           center: tileCenter,
           color: playerColorToFlutterColor[currentPlayerColor]!.shade100,
-          strokeColor: Colors.grey);
+          strokeColor: Colors.grey,
+          tileSize: scaledSize,
+          );
     }
 
     if (selectedLocation != null && currentPlayerColor != null) {
-      final tileCenter = selectedLocation!.toOffset(size, isScalable, gameState);
+      final tileCenter =
+          selectedLocation!.toOffset(size, isScalable, gameState);
       canvas.drawTile(
           center: tileCenter,
           color: playerColorToFlutterColor[currentPlayerColor]!.shade100,
-          strokeColor: Colors.blue);
+          strokeColor: Colors.blue,
+          tileSize: scaledSize,
+          );
     }
   }
 
@@ -73,10 +87,12 @@ extension OffsetConversion on TileLocation {
   Offset toOffset(Size size, bool isScalable, GameState gameState) {
     final center = size.center(Offset.zero);
     if (isScalable) {
+      final scalableTileSize = min(size.width / (gameState.xRange + margin),
+          size.height / (gameState.yRange + margin));
       return Offset(
-        center.dx + (x - gameState.xCenter) * tileSize,
-        center.dy + (y - gameState.yCenter) * tileSize,
-        );
+        center.dx + (x - gameState.xCenter) * scalableTileSize,
+        center.dy + (y - gameState.yCenter) * scalableTileSize,
+      );
     } else {
       return Offset(
         center.dx + x * tileSize,
@@ -91,6 +107,7 @@ extension TileDrawer on Canvas {
     required Offset center,
     Color? color,
     Color? strokeColor,
+    required double tileSize,
   }) {
     if (color != null) {
       drawRect(

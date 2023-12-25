@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:link_five/src/logic/actions/move_tile_action.dart';
 import 'package:link_five/src/logic/actions/place_tile_action.dart';
@@ -94,8 +96,11 @@ extension TileLocationConversion on Offset {
     int x;
     int y;
     if (isScalable) {
-      x = (relative.dx / tileSize + gameState.xCenter).round();
-      y = (relative.dy / tileSize + gameState.yCenter).round();
+      final scalableTileSize = min(size.width / (gameState.xRange + margin),
+          size.height / (gameState.yRange + margin));
+
+      x = (relative.dx / scalableTileSize + gameState.xCenter).round();
+      y = (relative.dy / scalableTileSize + gameState.yCenter).round();
     } else {
       x = (relative.dx / tileSize).round();
       y = (relative.dy / tileSize).round();
