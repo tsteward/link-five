@@ -44,13 +44,13 @@ class GameBoardWidgetState extends State<GameBoardWidget> {
     currentPlayerColor = widget.playerColor;
     return MouseRegion(
       onHover: (event) => setState(
-          () => _hoverLocation = event.localPosition.toTileLocation(context)),
+          () => _hoverLocation = event.localPosition.toTileLocation(context, widget.isScalable, widget.gameState)),
       onExit: (_) => setState(() => _hoverLocation = null),
       cursor:
           hoverLocation == null ? MouseCursor.defer : SystemMouseCursors.click,
       child: GestureDetector(
         onTapDown: (details) {
-          widget.onClick(details.localPosition.toTileLocation(context));
+          widget.onClick(details.localPosition.toTileLocation(context, widget.isScalable, widget.gameState));
         },
         child: CustomPaint(
           painter: TilePainter(
@@ -86,12 +86,20 @@ class GameBoardWidgetState extends State<GameBoardWidget> {
 }
 
 extension TileLocationConversion on Offset {
-  TileLocation toTileLocation(BuildContext context) {
+  TileLocation toTileLocation(
+      BuildContext context, bool isScalable, GameState gameState) {
     final size = MediaQuery.of(context).size;
     final center = size.center(Offset.zero);
     final relative = this - center;
-    final x = (relative.dx / tileSize).round();
-    final y = (relative.dy / tileSize).round();
+    int x;
+    int y;
+    if (isScalable) {
+      x = (relative.dx / tileSize + gameState.xCenter).round();
+      y = (relative.dy / tileSize + gameState.yCenter).round();
+    } else {
+      x = (relative.dx / tileSize).round();
+      y = (relative.dy / tileSize).round();
+    }
     return TileLocation(x, y);
   }
 }
