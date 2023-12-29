@@ -97,11 +97,12 @@ extension TileLocationConversion on Offset {
     int x;
     int y;
     if (isScalable) {
-      final scalableTileSize = min(size.width / (gameState.xRange + margin),
+      double scaledSize = min(size.width / (gameState.xRange + margin),
           size.height / (gameState.yRange + margin));
+      scaledSize = min(scaledSize, maxTileSize);
 
-      x = (relative.dx / scalableTileSize + gameState.xCenter).round();
-      y = (relative.dy / scalableTileSize + gameState.yCenter).round();
+      x = (relative.dx / scaledSize + gameState.xCenter).round();
+      y = (relative.dy / scaledSize + gameState.yCenter).round();
     } else {
       x = (relative.dx / tileSize).round();
       y = (relative.dy / tileSize).round();

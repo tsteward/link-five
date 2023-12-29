@@ -28,6 +28,7 @@ class TilePainter extends CustomPainter {
     if (isScalable) {
       scaledSize = min(size.width / (gameState.xRange + margin),
           size.height / (gameState.yRange + margin));
+      scaledSize = min(scaledSize, maxTileSize);
     }
     for (final tile in gameState.tiles) {
       final tileCenter = tile.location.toOffset(size, isScalable, gameState);
@@ -87,11 +88,12 @@ extension OffsetConversion on TileLocation {
   Offset toOffset(Size size, bool isScalable, GameState gameState) {
     final center = size.center(Offset.zero);
     if (isScalable) {
-      final scalableTileSize = min(size.width / (gameState.xRange + margin),
+      double scaledSize = min(size.width / (gameState.xRange + margin),
           size.height / (gameState.yRange + margin));
+      scaledSize = min(scaledSize, maxTileSize);
       return Offset(
-        center.dx + (x - gameState.xCenter) * scalableTileSize,
-        center.dy + (y - gameState.yCenter) * scalableTileSize,
+        center.dx + (x - gameState.xCenter) * scaledSize,
+        center.dy + (y - gameState.yCenter) * scaledSize,
       );
     } else {
       return Offset(
