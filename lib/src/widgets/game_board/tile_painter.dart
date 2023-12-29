@@ -1,9 +1,8 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:link_five/src/model/game/game_state.dart';
 import 'package:link_five/src/model/game/player_color.dart';
 import 'package:link_five/src/model/game/tile_location.dart';
+import 'package:link_five/src/model/game/tile_location_helpers.dart';
 import 'package:link_five/src/widgets/constants.dart';
 import 'package:link_five/src/widgets/game_board/constants.dart';
 
@@ -26,9 +25,7 @@ class TilePainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     double scaledSize = tileSize;
     if (isScalable) {
-      scaledSize = min(size.width / (gameState.xRange + margin),
-          size.height / (gameState.yRange + margin));
-      scaledSize = min(scaledSize, maxTileSize);
+      scaledSize = gameState.calculateScaledSize(size);
     }
     for (final tile in gameState.tiles) {
       final tileCenter = tile.location.toOffset(size, isScalable, gameState);
@@ -88,9 +85,7 @@ extension OffsetConversion on TileLocation {
   Offset toOffset(Size size, bool isScalable, GameState gameState) {
     final center = size.center(Offset.zero);
     if (isScalable) {
-      double scaledSize = min(size.width / (gameState.xRange + margin),
-          size.height / (gameState.yRange + margin));
-      scaledSize = min(scaledSize, maxTileSize);
+      double scaledSize = gameState.calculateScaledSize(size);
       return Offset(
         center.dx + (x - gameState.xCenter) * scaledSize,
         center.dy + (y - gameState.yCenter) * scaledSize,
