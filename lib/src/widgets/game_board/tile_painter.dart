@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:link_five/src/model/game/game_state.dart';
 import 'package:link_five/src/model/game/player_color.dart';
 import 'package:link_five/src/model/game/tile_location.dart';
-import 'package:link_five/src/model/game/tile_location_helpers.dart';
+import 'package:link_five/src/widgets/tile_location_helpers.dart';
 import 'package:link_five/src/widgets/constants.dart';
 import 'package:link_five/src/widgets/game_board/constants.dart';
 
