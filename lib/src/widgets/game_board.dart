@@ -4,6 +4,7 @@ import 'package:link_five/src/logic/actions/place_tile_action.dart';
 import 'package:link_five/src/model/game/game_state.dart';
 import 'package:link_five/src/model/game/player_color.dart';
 import 'package:link_five/src/model/game/tile_location.dart';
+import 'package:link_five/src/widgets/tile_location_helpers.dart';
 import 'package:link_five/src/widgets/game_board/constants.dart';
 import 'package:link_five/src/widgets/game_board/tile_painter.dart';
 
@@ -12,6 +13,7 @@ class GameBoardWidget extends StatefulWidget {
   final PlayerColor playerColor;
   final Function(TileLocation location) onClick;
   final TileLocation? selectedLocation;
+  final bool isScalable;
 
   const GameBoardWidget({
     super.key,
@@ -19,6 +21,7 @@ class GameBoardWidget extends StatefulWidget {
     required this.playerColor,
     required this.onClick,
     required this.selectedLocation,
+    required this.isScalable,
   });
 
   @override
@@ -41,14 +44,15 @@ class GameBoardWidgetState extends State<GameBoardWidget> {
     }
     currentPlayerColor = widget.playerColor;
     return MouseRegion(
-      onHover: (event) => setState(
-          () => _hoverLocation = event.localPosition.toTileLocation(context)),
+      onHover: (event) => setState(() => _hoverLocation = event.localPosition
+          .toTileLocation(context, widget.isScalable, widget.gameState)),
       onExit: (_) => setState(() => _hoverLocation = null),
       cursor:
           hoverLocation == null ? MouseCursor.defer : SystemMouseCursors.click,
       child: GestureDetector(
         onTapDown: (details) {
-          widget.onClick(details.localPosition.toTileLocation(context));
+          widget.onClick(details.localPosition
+              .toTileLocation(context, widget.isScalable, widget.gameState));
         },
         child: CustomPaint(
           painter: TilePainter(
@@ -56,6 +60,7 @@ class GameBoardWidgetState extends State<GameBoardWidget> {
             hoverLocation: hoverLocation,
             selectedLocation: widget.selectedLocation,
             currentPlayerColor: currentPlayerColor,
+            isScalable: widget.isScalable,
           ),
           child: Container(),
         ),
@@ -83,12 +88,22 @@ class GameBoardWidgetState extends State<GameBoardWidget> {
 }
 
 extension TileLocationConversion on Offset {
-  TileLocation toTileLocation(BuildContext context) {
+  TileLocation toTileLocation(
+      BuildContext context, bool isScalable, GameState gameState) {
     final size = MediaQuery.of(context).size;
     final center = size.center(Offset.zero);
     final relative = this - center;
-    final x = (relative.dx / tileSize).round();
-    final y = (relative.dy / tileSize).round();
+    int x;
+    int y;
+    if (isScalable) {
+      double scaledSize = gameState.calculateScaledSize(size);
+
+      x = (relative.dx / scaledSize + gameState.xCenter).round();
+      y = (relative.dy / scaledSize + gameState.yCenter).round();
+    } else {
+      x = (relative.dx / tileSize).round();
+      y = (relative.dy / tileSize).round();
+    }
     return TileLocation(x, y);
   }
 }
