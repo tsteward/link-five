@@ -39,7 +39,7 @@ class SetupGameCodeWidgetState extends State<SetupGameCodeWidget> {
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: ElevatedButton(
-            onPressed:  validateAndJoinGame,
+            onPressed: validateAndJoinGame,
             child: const Text('Join Game'),
           ),
         ),
