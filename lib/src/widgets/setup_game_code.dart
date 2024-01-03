@@ -33,14 +33,13 @@ class SetupGameCodeWidgetState extends State<SetupGameCodeWidget> {
           child: TextFormField(
             decoration: const InputDecoration(labelText: 'Game Code'),
             controller: _gameCodeController,
-            onEditingComplete: () =>
-                widget.onJoinGameClicked(_gameCodeController.text),
+            onEditingComplete: validateAndJoinGame,
           ),
         ),
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: ElevatedButton(
-            onPressed: () => widget.onJoinGameClicked(_gameCodeController.text),
+            onPressed:  validateAndJoinGame,
             child: const Text('Join Game'),
           ),
         ),
@@ -53,5 +52,11 @@ class SetupGameCodeWidgetState extends State<SetupGameCodeWidget> {
         ),
       ],
     );
+  }
+
+  void validateAndJoinGame() {
+    if (_gameCodeController.text.length == 6) {
+      widget.onJoinGameClicked(_gameCodeController.text);
+    }
   }
 }
