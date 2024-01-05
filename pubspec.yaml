@@ -14,7 +14,7 @@ dependencies:
   built_value: ^8.8.1
   built_collection: ^5.1.0
   firebase_core: ^2.23.0
-  firebase_auth: ^4.15.3
+  firebase_auth: ^4.16.0
   cloud_firestore: ^4.14.0
 
 dev_dependencies:
